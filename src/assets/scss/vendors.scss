@@ -1,0 +1,190 @@
+// V-Tooltip
+.tooltip {
+    display: block !important;
+    z-index: 10000;
+    box-shadow: 0 0 12px 0 rgba(0,0,0,0.2);
+
+    .tooltip-inner {
+      color: white;
+      border-radius: 4px;
+      text-align: left;
+      line-height: 16px;
+      padding: 15px 10px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .tooltip-arrow {
+      width: 0;
+      height: 0;
+      border-style: solid;
+      position: absolute;
+      margin: 5px;
+      border-color: black;
+      z-index: 1;
+      opacity: 0;
+    }
+
+    &[x-placement^="top"] {
+      margin-bottom: 5px;
+
+      .tooltip-arrow {
+        border-width: 5px 5px 0 5px;
+        border-left-color: transparent !important;
+        border-right-color: transparent !important;
+        border-bottom-color: transparent !important;
+        bottom: -5px;
+        left: calc(50% - 5px);
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+    }
+
+    &[x-placement^="bottom"] {
+      margin-top: 5px;
+
+      .tooltip-arrow {
+        border-width: 0 5px 5px 5px;
+        border-left-color: transparent !important;
+        border-right-color: transparent !important;
+        border-top-color: transparent !important;
+        top: -5px;
+        left: calc(50% - 5px);
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+    }
+
+    &[x-placement^="right"] {
+      margin-left: 5px;
+
+      .tooltip-arrow {
+        border-width: 5px 5px 5px 0;
+        border-left-color: transparent !important;
+        border-top-color: transparent !important;
+        border-bottom-color: transparent !important;
+        left: -5px;
+        top: calc(50% - 5px);
+        margin-left: 0;
+        margin-right: 0;
+      }
+    }
+
+    &[x-placement^="left"] {
+      margin-right: 5px;
+
+      .tooltip-arrow {
+        border-width: 5px 0 5px 5px;
+        border-top-color: transparent !important;
+        border-right-color: transparent !important;
+        border-bottom-color: transparent !important;
+        right: -5px;
+        top: calc(50% - 5px);
+        margin-left: 0;
+        margin-right: 0;
+      }
+    }
+
+    &.popover {
+      $color: #f9f9f9;
+
+      .popover-inner {
+        background: $color;
+        color: black;
+        padding: 24px;
+        border-radius: 5px;
+        box-shadow: 0 5px 30px rgba(black, .1);
+      }
+
+      .popover-arrow {
+        border-color: $color;
+      }
+    }
+
+    &[aria-hidden='true'] {
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity .15s, visibility .15s;
+    }
+
+    &[aria-hidden='false'] {
+      visibility: visible;
+      opacity: 1;
+      transition: opacity .15s;
+    }
+  }
+
+  // Uppy Input FIle
+
+//   .uppy-FileInput-btn {
+//     @extend .btn;
+//     @extend .btn-primary;
+//     color: white;
+//   }
+
+// Vue-Multiselect
+
+  .multiselect {
+    .multiselect__tags {
+        border-radius: 0;
+    }
+
+    .multiselect__content-wrapper {
+        border-radius: 0;
+    }
+
+    .multiselect__element {
+        padding-left: 0;
+
+        .multiselect__option--highlight {
+            background: var(--base-color);
+
+            &::after {
+                background: var(--base-color);
+            }
+
+            &.multiselect__option--selected {
+                background: #f3f3f3;
+                color: #35495e;
+                font-weight: 700;
+
+                &::after {
+                    background: #f3f3f3;
+                    color: #35495e;
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+
+    .multiselect__placeholder {
+        margin-bottom: 8px;
+        padding-top: 0;
+    }
+}
+
+// BP-Dropdown
+.bp-dropdown {
+    &__btn {
+        border: 0 !important;
+        padding: 0 !important;
+
+        &--active {
+            background-color: transparent !important;
+        }
+    }
+
+    &__icon {
+        display: none !important;
+    }
+
+    ul {
+        margin-bottom: 0 !important;
+        padding-left: 0 !important;
+        list-style: none !important;
+    }
+
+    .bp-dropdown__body {
+        border-radius: 3px !important;
+    }
+}
