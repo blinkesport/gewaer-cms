@@ -125,6 +125,9 @@ export default {
                 method: "PUT",
                 data: {
                     "default_company": company.id
+                },
+                headers: {
+                    "SITE-KEY": process.env.VUE_APP_SITE_KEY
                 }
             }).then(() => {
                 // Solution implemented for now until we can properly refresh all
