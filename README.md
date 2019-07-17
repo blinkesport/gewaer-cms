@@ -1,27 +1,43 @@
-# test
+# Gewaer cms
 
 ## Project setup
-```
+
+```bash
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Setup the enviroment variables
+
+```bash
+cp .env.example .env
 ```
+
+Fill the variables with it corresponding values
+
+### Compiles and hot-reloads for development
+
+```bash
 npm run serve
 ```
 
 ### Compiles and minifies for production
-```
+
+```bash
 npm run build
 ```
 
 ### Run your tests
-```
+
+```bash
 npm run test
 ```
 
 ### Lints and fixes files
-```
+
+```bash
 npm run lint
 ```
-# gewaer-cms
+
+### Customize configuration
+
+See [Configuration Reference](https://cli.vuejs.org/config/).
