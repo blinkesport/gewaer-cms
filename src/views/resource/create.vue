@@ -15,13 +15,13 @@ import { mapState } from "vuex";
 
 export default {
     name: "CreateResource",
+    components: {
+        UnknownResource: () => import(/* webpackChunkName: "unknown-resource" */ "@c/forms/unknown-resource/unknown-resource")
+    },
     data() {
         return {
             currentResource: {}
         };
-    },
-    components: {
-        UnknownResource: () => import(/* webpackChunkName: "unknown-resource" */ "@c/forms/unknown-resource/unknown-resource")
     },
     computed: {
         ...mapState({

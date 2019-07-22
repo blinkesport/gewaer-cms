@@ -26,7 +26,7 @@ export default {
     name: "CustomMultiselect",
     props: {
         value: {
-            type: Object|Array|String|Number,
+            type: Object | Array | String | Number,
             required: true
         },
         id: {
@@ -76,7 +76,7 @@ export default {
     },
     computed: {
         mergedProps() {
-            return {...this.defaultProps, ...this.multiselectProps}
+            return { ...this.defaultProps, ...this.multiselectProps }
         }
     },
     created() {
@@ -139,7 +139,7 @@ export default {
         orderComparison(a, b) {
             if (this.sortOptions.order === "desc") {
                 return a[this.sortOptions.key] < b[this.sortOptions.key] ? 1 : -1;
-            } else if(this.sortOptions.order === "asc") {
+            } else if (this.sortOptions.order === "asc") {
                 return a[this.sortOptions.key] > b[this.sortOptions.key] ? -1 : 1;
             }
         }

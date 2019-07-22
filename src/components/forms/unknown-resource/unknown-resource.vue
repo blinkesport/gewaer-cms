@@ -20,7 +20,7 @@
                             type="text"
                             data-vv-name="title"
                             data-vv-validate-on="blur"
-                        />
+                        >
                     </div>
                 </div>
                 <div class="col">
@@ -37,7 +37,7 @@
                             data-vv-name="slug"
                             data-vv-as="Slug"
                             data-vv-delay="250"
-                        />
+                        >
                     </div>
                 </div>
                 <div class="col">
@@ -48,15 +48,15 @@
                         </label>
                         <input
                             v-validate="'required'"
-                            type="url"
-                            placeholder="https://www.mordor.com"
-                            pattern="https://.*" 
-                            size="30"
                             v-model.trim="postMediaUrl"
+                            type="url"
+                            placeholder="https://www.mordor.com" 
+                            pattern="https://.*"
+                            size="30"
                             class="form-control"
                             data-vv-name="media-url"
                             data-vv-as="Media Url"
-                        />
+                        >
                     </div>
                 </div>
             </div>

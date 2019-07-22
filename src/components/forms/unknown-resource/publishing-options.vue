@@ -115,7 +115,7 @@ export default {
         }),
         published_at: {
             get() {
-                if(this.partialData.published_at) {
+                if (this.partialData.published_at) {
                     return moment.utc(this.partialData.published_at).tz("America/New_York").format("YYYY-MM-DD HH:mm:ss");
                 }
             },
@@ -158,7 +158,7 @@ export default {
             },
             set(value) {
                 const draftStatus = 1;
-                if(value.id == draftStatus) {
+                if (value.id == draftStatus) {
                     this.$store.commit("BookInsight/SET_PUBLISHED_AT", null);
                 } else {
                     const publishedAt = moment.utc().format("YYYY-MM-DD HH:mm:ss");
