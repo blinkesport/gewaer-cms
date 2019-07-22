@@ -51,6 +51,7 @@ module.exports = {
             allowTemplateLiterals: true
         }],
         semi: 0,
+        "vue/no-v-html": 0,
         "space-infix-ops": "error",
         "no-multi-spaces": ["error", { exceptions: { "Property": false } }],
         "space-before-blocks": "error",
