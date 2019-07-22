@@ -44,6 +44,7 @@
 </template>
 
 <script>
+
 const { AppHeader, AppSidebar } = require(`./import.${process.env.VUE_APP_IMPORTS}`);
 
 import { mapActions, mapGetters, mapState } from "vuex";

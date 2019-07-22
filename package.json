@@ -16,7 +16,7 @@
     "@babel/polyfill": "^7.4.4",
     "@casl/ability": "^3.0.2",
     "@casl/vue": "^0.5.1",
-    "@gewaer/gw-browse": "^0.2.0",
+    "@gewaer/gw-browse": "^0.2.1",
     "@gewaer/gw-header": "^0.2.1",
     "@gewaer/gw-settings": "^0.1.5",
     "@gewaer/gw-sidebar": "^0.2.0",
