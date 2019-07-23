@@ -98,6 +98,11 @@ const router = new Router({
             path: "/browse/:resource/create",
             name: "create-resource",
             component: createResource
+        },
+        {
+            path: "/browse/:resource/:id/edit",
+            name: "edit-resource",
+            component: createResource
         }
     ]
 });

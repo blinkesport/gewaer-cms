@@ -46,8 +46,9 @@ const actions = {
             url: `/apps/${process.env.VUE_APP_APPLICATION_KEY}/settings`
         }).then(response => {
             commit("SET_DATA", response.data);
+        }).finally(() => {
             commit("SET_IS_LOADING", false);
-        });
+        })
     },
     getGlobalStateData({ dispatch }) {
         if (!Cookies.get("token") || !isValidJWT(Cookies.get("token"))) {

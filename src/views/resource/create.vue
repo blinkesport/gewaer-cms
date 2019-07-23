@@ -4,7 +4,7 @@
         <div class="card">
             <div class="card-block">
                 <!-- <form class="resource-form" novalidate/> -->
-                <unknown-resource />
+                <component :is="$route.params.resource"/>
             </div>
         </div>
     </div>
@@ -16,7 +16,7 @@ import { mapState } from "vuex";
 export default {
     name: "CreateResource",
     components: {
-        UnknownResource: () => import(/* webpackChunkName: "unknown-resource" */ "@c/forms/unknown-resource/unknown-resource")
+        posts: () => import(/* webpackChunkName: "unknown-resource" */ "@c/forms/posts/posts")
     },
     data() {
         return {

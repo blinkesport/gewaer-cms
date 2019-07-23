@@ -1,5 +1,5 @@
 <template>
-    <form class="resource-form" @submit.prevent="">
+    <form class="resource-form" @submit.prevent="submitForm">
         <div class="row">
             <div class="col">
                 <h3 class="title">Some Title</h3>
@@ -15,7 +15,7 @@
                         </label>
                         <input
                             v-validate="'required'"
-                            v-model="title"
+                            v-model="postTitle"
                             class="form-control"
                             type="text"
                             data-vv-name="title"
@@ -27,16 +27,15 @@
                     <div :class="{ 'border-danger': errors.has('slug') }" class="form-group form-group-default">
                         <label :class="{'text-danger': errors.has('slug') }">
                             Slug
-                            <span v-if="errors.has('slug')"> ({{ errors.first('slug') }})</span>
+                            <span v-if="errors.has('slug')"> (required) </span>
                         </label>
                         <input
                             v-validate="'required'"
-                            v-model.trim="slug"
+                            v-model.trim="postSlug"
                             class="form-control"
                             type="text"
                             data-vv-name="slug"
                             data-vv-as="Slug"
-                            data-vv-delay="250"
                         >
                     </div>
                 </div>
@@ -50,7 +49,7 @@
                             v-validate="'required'"
                             v-model.trim="postMediaUrl"
                             type="url"
-                            placeholder="https://www.mordor.com" 
+                            placeholder="https://www.mordor.com"
                             pattern="https://.*"
                             size="30"
                             class="form-control"
@@ -70,7 +69,7 @@
                         <quill-wrapper
                             v-validate="'required'"
                             :class="{ 'border-danger': errors.has('summary') }"
-                            v-model="summary"
+                            v-model="postSummary"
                             data-vv-name="summary"
                             name="summary"
                             data-vv-as="Body"
@@ -88,7 +87,7 @@
                         <quill-wrapper
                             v-validate="'required'"
                             :class="{ 'border-danger': errors.has('content') }"
-                            v-model="content"
+                            v-model="postContent"
                             data-vv-name="content"
                             name="content"
                             data-vv-as="Body"
@@ -104,9 +103,8 @@
                             <span v-if="errors.has('category')">(required)</span>
                         </label>
                         <multiselect-wrapper
-                            v-validate="'required'"
                             id="name"
-                            v-model="category"
+                            v-model="postCategory"
                             :endpoint="categoryEndpoint"
                             :multiselect-props="categoryMultiselectProps"
                             :class="{'border-danger': errors.has('category')}"
@@ -151,9 +149,31 @@
                 </div>
             </div>
         </div>
+
+        <div class="row float-right">
+            <div class="m-2">
+                <button
+                    :disabled="isLoading"
+                    :title="isLoading ? 'Processing, wait a moment...' : 'Save'"
+                    :class="{ 'deactivated': isLoading }"
+                    class="btn m-1 btn-primary float-right"
+                >
+                    Save
+                </button>
+                <router-link
+                    :to="{ name: 'browse', params: { resource: 'book-insights'} }"
+                    :disabled="isLoading"
+                    :title="isLoading ? 'Processing, wait a moment...' : 'Cancel'"
+                    class="btn m-1 btn-danger float-right"
+                >
+                    Cancel
+                </router-link>
+            </div>
+        </div>
     </form>
 </template>
 <script>
+import { mapState } from "vuex";
 
 
 export default {
@@ -163,36 +183,138 @@ export default {
     },
     data() {
         return {
-            title: "",
-            slug: "",
-            summary: "",
-            content: "",
-
-            category: "",
             categoryEndpoint: "categories",
             categoryMultiselectProps: {
                 "trackBy": "id",
                 "label": "name"
             },
 
-            postType: "",
             postTypeEndpoint: "type",
             postTypeMultiselectProps: {
                 "multiple": true
             },
 
-            postTags: "",
             postTagsEndpoint: "tags",
             postTagsMultiselectProps: {
                 "multiple": true
             },
-
-            postMediaUrl: ""
+            postsEndpoint: "posts"
+        }
+    },
+    computed: {
+        ...mapState({
+            isLoading: state => state.Application.isLoading,
+            post: state => state.Post.data
+        }),
+        postTitle: {
+            get() {
+                return this.$store.state.Post.data.title;
+            },
+            set(title) {
+                this.$store.commit("Post/SET_TITLE", title);
+            }
+        },
+        postSlug: {
+            get() {
+                return this.$store.state.Post.data.slug;
+            },
+            set(slug) {
+                this.$store.commit("Post/SET_SLUG", slug);
+            }
+        },
+        postMediaUrl: {
+            get() {
+                return this.$store.state.Post.data.media_url;
+            },
+            set(url) {
+                this.$store.commit("Post/SET_MEDIA_URL", url);
+            }
+        },
+        postSummary: {
+            get() {
+                return this.$store.state.Post.data.summary;
+            },
+            set(summary) {
+                this.$store.commit("Post/SET_SUMMARY", summary);
+            }
+        },
+        postContent: {
+            get() {
+                return this.$store.state.Post.data.content;
+            },
+            set(content) {
+                this.$store.commit("Post/SET_CONTENT", content);
+            }
+        },
+        postCategory: {
+            get() {
+                return this.$store.state.Post.data.category;
+            },
+            set(category) {
+                this.$store.commit("Post/SET_CATEGORY", category);
+            }
+        },
+        postType: {
+            get() {
+                return this.$store.state.Post.data.post_type;
+            },
+            set(type) {
+                this.$store.commit("Post/SET_POST_TYPE", type);
+            }
+        },
+        postTags: {
+            get() {
+                return this.$store.state.Post.data.tags;
+            },
+            set(tags) {
+                this.$store.commit("Post/SET_POST_TAGS", tags);
+            }
+        }
+    },
+    created() {
+        if (this.isEditing()) {
+            this.$store.dispatch("Post/updateCurrent", this.$route.params.id)
         }
     },
     methods: {
-        submitForm() {
-            console.log("Submit!");
+        async submitForm() {
+            const isFormValid = await this.validateFields();
+            if (isFormValid) {
+                this.$store.commit("Application/SET_IS_LOADING", true);
+                const url = this.isEditing ? `${this.postsEndpoint}/${this.$route.params.id}` : this.postsEndpoint;
+                const method = this.isEditing ? "PUT" : "POST";
+
+                axios({
+                    url,
+                    method,
+                    data: this.post
+                }).then(() => {
+                    this.$notify({
+                        text: "Post saved successfully",
+                        type: "success"
+                    });
+                    this.$router.push({ name: "browse", params: { resource: "posts" } });
+                }).catch(error => {
+                    this.$notify({
+                        text: error.response.data.errors.message,
+                        type: "error"
+                    });
+                }).finally(() => {
+                    this.$store.commit("Application/SET_IS_LOADING", false);
+                });
+            } else {
+                // this.$_focusOnError();
+            }
+        },
+        isEditing() {
+            return this.$route.params.id;
+        },
+        async validateFields() {
+            const isValid = this.$validator.validate();
+            if (!isValid) {
+                return false;
+            }
+            return true;
         }
     }
 }

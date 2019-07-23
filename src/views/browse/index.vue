@@ -7,8 +7,26 @@
         :query-params="queryParams"
         :resources="resources"
         pagination-path=""
-        @load-error="loadError"
-    />
+        @load-error="loadError">
+        <template slot="actions" slot-scope="props">
+            <div class="btn-group">
+                <button
+                    type="button"
+                    class="btn btn-primary btn-sm"
+                    @click="editResource(props.rowData.id)"
+                >
+                    Edit
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    @click="confirmDelete(props)"
+                >
+                    Delete
+                </button>
+            </div>
+        </template>
+    </gw-browse>
 </template>
 
 <script>
@@ -69,6 +87,9 @@ export default {
             paginationData.to = paginationData.from + paginationData.per_page - 1;
 
             return paginationData;
+        },
+        editResource(resourceId) {
+            this.$router.push({ name: "edit-resource", params: { id: resourceId } });
         }
     }
 }
