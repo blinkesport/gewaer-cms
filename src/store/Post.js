@@ -45,7 +45,7 @@ const state = {
         "created_at": "",
         "updated_at": "",
         "is_deleted": ""
-      }
+    }
 }
 
 const mutations = {
