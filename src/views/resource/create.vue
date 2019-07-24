@@ -16,7 +16,7 @@ import { mapState } from "vuex";
 export default {
     name: "CreateResource",
     components: {
-        posts: () => import(/* webpackChunkName: "unknown-resource" */ "@c/forms/posts/posts")
+        Posts: () => import(/* webpackChunkName: "posts" */ "@c/forms/posts/posts")
     },
     data() {
         return {

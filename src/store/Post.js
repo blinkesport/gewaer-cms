@@ -1,4 +1,5 @@
 import axios from "axios";
+const slugify = require("@sindresorhus/slugify");
 
 const state = {
     data: {
@@ -41,17 +42,17 @@ const mutations = {
     SET_POST_TYPE(state, type) {
         state.data.post_type = type;
     },
-    SET_TAGS(state, tags) {
+    SET_POST_TAGS(state, tags) {
         state.data.tags = tags;
     },
     SET_MEDIA_URL(state, url) {
-        state.data.url = url;
+        state.data.media_url = url;
     },
     SET_FILES(state, files) {
         state.data.files = files;
     },
-    SET_STATUS(state, status) {
-        stat.data.status = status;
+    SET_PUBLISHED_STATUS(state, status) {
+        state.data.status = status;
     },
     SET_PUBLISHED_AT(state, publishedDate) {
         state.data.published_at = publishedDate;
@@ -65,18 +66,48 @@ const mutations = {
 }
 
 const actions = {
-    updateCurrent({ commit, dispatch }, id) {
-        dispatch("getPost", id).then(({ data: post }) => {
+    // TODO: rename to update data
+    updateData({ commit, dispatch }, id) {
+        dispatch("Tags/updateData", null, { root: true });
+        dispatch("getData", id).then(({ data: post }) => {
             commit("SET_POST", post);
-        })
+        });
     },
-    getPost(_, id) {
+    // TODO: rename to get data
+    getData(_, id) {
         return axios({ url: `/posts/${id}` });
+    },
+    saveSluggedTitle({ commit }, title) {
+        const slugifiedTitle = slugify(title);
+        commit("SET_SLUG", slugifiedTitle);
+    },
+    cleanUp({ commit }) {
+        const data = {
+            title: "",
+            slug: "",
+            summary: "",
+            content: "",
+            category: "",
+            post_type: "",
+            tags: [],
+            media_url: "",
+            files: [],
+            // status box
+            status: 1,
+            published_at: null,
+            premium: 0,
+            featured: 0
+        }
+        commit("SET_POST", data);
     }
+
 }
 
 const getters = {
-
+    isScheduled(state) {
+        const SCHEDULE_STATUS_ID = 2;
+        return Number(state.data.status) === SCHEDULE_STATUS_ID;
+    }
 }
 
 export default {

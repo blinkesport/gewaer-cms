@@ -5,8 +5,8 @@
                 <div class="switch">
                     <label class="mb-0 mr-2">Premium</label>
                     <vue-switches
-                        v-model="bookInsightPremium"
-                        :selected="bookInsightPremium"
+                        v-model="premium"
+                        :selected="premium"
                         :emit-on-mount="false"
                         class="state-switch mb-0 d-flex align-items-center"
                         theme="bulma"
@@ -17,8 +17,8 @@
                 <div class="switch">
                     <label class="mb-0 mr-2">{{ featuredLabel }}</label>
                     <vue-switches
-                        v-model="bookInsightFeatured"
-                        :selected="bookInsightFeatured"
+                        v-model="featured"
+                        :selected="featured"
                         :emit-on-mount="false"
                         class="state-switch mb-0 d-flex align-items-center"
                         theme="bulma"
@@ -29,7 +29,7 @@
                 <label class="mb-0 mr-2">Status</label>
                 <div class="form-group-multiselect mb-0">
                     <multiselect
-                        v-model="bookInsightStatus"
+                        v-model="publishedStatus"
                         :show-labels="false"
                         :allow-empty="false"
                         :options="statusList"
@@ -40,7 +40,7 @@
             </div>
             <div v-if="isScheduled" class="col-12 col-sm-6 col-md-auto">
                 <el-date-picker
-                    v-model="bookInsightPublished"
+                    v-model="publishedAt"
                     :clearable="false"
                     :format="'dd MMM yyyy hh:mm A'"
                     class="datetime-picker"
@@ -55,7 +55,6 @@
 
 <script>
 
-import pick from "lodash/pick";
 import Vue from "vue";
 import { DatePicker } from "element-ui";
 Vue.use(DatePicker);
@@ -63,18 +62,13 @@ import lang from "element-ui/lib/locale/lang/en"
 import locale from "element-ui/lib/locale"
 locale.use(lang);
 import moment from "moment";
-import { mapGetters } from "vuex";
 
 export default {
     name: "PublishingOptions",
     components: {
-        vueSwitches: () => import(/* webpackChunkName: "vue-switches" */ "@c/switches")
+        vueSwitches: () => import(/* webpackChunkName: "vue-switches" */ "@c/forms/switches")
     },
     props: {
-        model: {
-            type: Object,
-            required: true
-        },
         showPremium: {
             type: Boolean,
             default: true
@@ -82,16 +76,14 @@ export default {
         featuredLabel: {
             type: String,
             required: true
+        },
+        storeName: {
+            type: String,
+            required: true
         }
     },
     data() {
         return {
-            partialData: pick(this.model, [
-                "status",
-                "published_at",
-                "premium",
-                "featured"
-            ]),
             // TODO: waiting for endpoint.
             statusList: [
                 {
@@ -110,70 +102,52 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({
-            isScheduled: "BookInsight/isSchedule"
-        }),
-        published_at: {
+        isScheduled() {
+            return this.$store.getters["Post/isScheduled"];
+        },
+        premium: {
             get() {
-                if (this.partialData.published_at) {
-                    return moment.utc(this.partialData.published_at).tz("America/New_York").format("YYYY-MM-DD HH:mm:ss");
-                }
+                return Number(this.$store.state[this.storeName].data.premium);
             },
-            set(value) {
-                this.partialData.published_at = moment.utc(value).format("YYYY-MM-DD HH:mm:ss");
+            set(status) {
+                this.$store.commit(`${this.storeName}/SET_PREMIUM_STATUS`, status);
             }
         },
-        bookInsightPremium: {
+        featured: {
             get() {
-                return Number(this.$store.state.BookInsight.bookInsight.premium);
+                return Number(this.$store.state[this.storeName].data.featured);
             },
-            set(value) {
-                this.$store.commit("BookInsight/SET_PREMIUM_STATUS", value);
+            set(isFeatured) {
+                this.$store.commit(`${this.storeName}/SET_FEATURED_STATUS`, isFeatured);
             }
         },
-        bookInsightFeatured: {
+        publishedAt: {
             get() {
-                return Number(this.$store.state.BookInsight.bookInsight.featured);
-            },
-            set(value) {
-                this.$store.commit("BookInsight/SET_FEATURED", value);
-            }
-        },
-        bookInsightPublished: {
-            get() {
-                const publishedAt = this.$store.state.BookInsight.bookInsight.published_at;
+                const publishedAt = this.$store.state[this.storeName].data.published_at;
                 return moment.utc(publishedAt).format("YYYY-MM-DD HH:mm:ss");
             },
-            set(value) {
-                const publishedAt = moment.utc(value).format("YYYY-MM-DD HH:mm:ss");
-                this.$store.commit("BookInsight/SET_PUBLISHED_AT", publishedAt);
+            set(isPublished) {
+                const publishedAt = moment.utc(isPublished).format("YYYY-MM-DD HH:mm:ss");
+                this.$store.commit(`${this.storeName}/SET_PUBLISHED_AT`, publishedAt);
             }
         },
-        bookInsightStatus: {
+        publishedStatus: {
             get() {
-                const remoteStatus = Number(this.$store.state.BookInsight.bookInsight.status);
+                const remoteStatus = Number(this.$store.state[this.storeName].data.status);
                 return this.statusList.find((status) => {
                     return remoteStatus === status.id
                 });
             },
-            set(value) {
+            set(status) {
                 const draftStatus = 1;
-                if (value.id == draftStatus) {
+                if (status.id == draftStatus) {
                     this.$store.commit("BookInsight/SET_PUBLISHED_AT", null);
                 } else {
                     const publishedAt = moment.utc().format("YYYY-MM-DD HH:mm:ss");
-                    this.$store.commit("BookInsight/SET_PUBLISHED_AT", publishedAt);
+                    this.$store.commit(`${this.storeName}/SET_PUBLISHED_AT`, publishedAt);
                 }
-                this.$store.commit("BookInsight/SET_STATUS", value.id);
+                this.$store.commit(`${this.storeName}/SET_PUBLISHED_STATUS`, status.id);
             }
-        }
-    },
-    watch: {
-        partialData: {
-            handler(newPartialData) {
-                this.$emit("audiobook-publishing-options-changed", newPartialData);
-            },
-            deep: true
         }
     }
 }

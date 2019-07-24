@@ -1,185 +1,214 @@
 <template>
-    <form class="resource-form" @submit.prevent="submitForm">
-        <div class="row">
-            <div class="col">
-                <h3 class="title">Some Title</h3>
-            </div>
-        </div>
-        <div class="col-12 col-md">
-            <div class="row">
-                <div class="col">
-                    <div :class="{ 'border-danger': errors.has('title') }" class="form-group form-group-default">
-                        <label :class="{'text-danger': errors.has('title') }">
-                            Title
-                            <span v-if="errors.has('title')">(required)</span>
-                        </label>
-                        <input
-                            v-validate="'required'"
-                            v-model="postTitle"
-                            class="form-control"
-                            type="text"
-                            data-vv-name="title"
-                            data-vv-validate-on="blur"
-                        >
-                    </div>
-                </div>
-                <div class="col">
-                    <div :class="{ 'border-danger': errors.has('slug') }" class="form-group form-group-default">
-                        <label :class="{'text-danger': errors.has('slug') }">
-                            Slug
-                            <span v-if="errors.has('slug')"> (required) </span>
-                        </label>
-                        <input
-                            v-validate="'required'"
-                            v-model.trim="postSlug"
-                            class="form-control"
-                            type="text"
-                            data-vv-name="slug"
-                            data-vv-as="Slug"
-                        >
-                    </div>
-                </div>
-                <div class="col">
-                    <div :class="{ 'border-danger': errors.has('media-url') }" class="form-group form-group-default">
-                        <label :class="{'text-danger': errors.has('media-url') }">
-                            Media Url
-                            <span v-if="errors.has('media-url')"> ({{ errors.first('media-url') }})</span>
-                        </label>
-                        <input
-                            v-validate="'required'"
-                            v-model.trim="postMediaUrl"
-                            type="url"
-                            placeholder="https://www.mordor.com"
-                            pattern="https://.*"
-                            size="30"
-                            class="form-control"
-                            data-vv-name="media-url"
-                            data-vv-as="Media Url"
-                        >
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div class="form-group">
-                        <label :class="{ 'text-danger': errors.has('summary') }">
-                            Summary
-                            <span v-if="errors.has('summary')">(required)</span>
-                        </label>
-                        <quill-wrapper
-                            v-validate="'required'"
-                            :class="{ 'border-danger': errors.has('summary') }"
-                            v-model="postSummary"
-                            data-vv-name="summary"
-                            name="summary"
-                            data-vv-as="Body"
-                        />
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div class="form-group">
-                        <label :class="{ 'text-danger': errors.has('content') }">
-                            Content
-                            <span v-if="errors.has('content')">(required)</span>
-                        </label>
-                        <quill-wrapper
-                            v-validate="'required'"
-                            :class="{ 'border-danger': errors.has('content') }"
-                            v-model="postContent"
-                            data-vv-name="content"
-                            name="content"
-                            data-vv-as="Body"
-                        />
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 col-md">
-                    <div class="form-group-multiselect">
-                        <label :class="{'text-danger': errors.has('category') }">
-                            Category
-                            <span v-if="errors.has('category')">(required)</span>
-                        </label>
-                        <multiselect-wrapper
-                            id="name"
-                            v-model="postCategory"
-                            :endpoint="categoryEndpoint"
-                            :multiselect-props="categoryMultiselectProps"
-                            :class="{'border-danger': errors.has('category')}"
-                            data-vv-as="Category"
-                            data-vv-name="category"
-                        >
-                            <!-- <template slot="beforeList" >
-                                <div class="add-author-button option__desc" @click="$modal.show('category-modal', { action: 'BookInsight/updateCategory' })">
-                                    <i class="fa fa-plus" />Add Category
-                                </div>
-                            </template> -->
-                        </multiselect-wrapper>
-                    </div>
-                </div>
-                <div class="col-12 col-md">
-                    <div class="form-group-multiselect">
-                        <label>
-                            Type
-                        </label>
-                        <multiselect-wrapper
-                            id="title"
-                            v-model.lazy="postType"
-                            :exclude-option-id="$route.params.id"
-                            :endpoint="postTypeEndpoint"
-                            :multiselect-props="postTypeMultiselectProps"
-                        />
-                    </div>
-                </div>
-                <div class="col-12 col-md">
-                    <div class="form-group-multiselect">
-                        <label>
-                            Tags
-                        </label>
-                        <multiselect-wrapper
-                            id="title"
-                            v-model.lazy="postTags"
-                            :exclude-option-id="$route.params.id"
-                            :endpoint="postTagsEndpoint"
-                            :multiselect-props="postTagsMultiselectProps"
-                        />
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div>
+        <post-category-modal />
+        <post-tag-modal />
+        <post-type-modal />
 
-        <div class="row float-right">
-            <div class="m-2">
-                <button
-                    :disabled="isLoading"
-                    :title="isLoading ? 'Processing, wait a moment...' : 'Save'"
-                    :class="{ 'deactivated': isLoading }"
-                    class="btn m-1 btn-primary float-right"
-                >
-                    Save
-                </button>
-                <router-link
-                    :to="{ name: 'browse', params: { resource: 'book-insights'} }"
-                    :disabled="isLoading"
-                    :title="isLoading ? 'Processing, wait a moment...' : 'Cancel'"
-                    class="btn m-1 btn-danger float-right"
-                >
-                    Cancel
-                </router-link>
+        <form class="resource-form" @submit.prevent="submitForm">
+            <div class="row">
+                <div class="col">
+                    <h3 class="title">Some Title</h3>
+                </div>
             </div>
-        </div>
-    </form>
+            <div class="col-12 col-md">
+                <div class="row">
+                    <div class="col">
+                        <div :class="{ 'border-danger': errors.has('title') }" class="form-group form-group-default">
+                            <label :class="{'text-danger': errors.has('title') }">
+                                Title
+                                <span v-if="errors.has('title')">(required)</span>
+                            </label>
+                            <input
+                                v-validate="'required'"
+                                v-model="postTitle"
+                                class="form-control"
+                                type="text"
+                                data-vv-name="title"
+                                data-vv-validate-on="blur"
+                            >
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div :class="{ 'border-danger': errors.has('slug') }" class="form-group form-group-default">
+                            <label :class="{'text-danger': errors.has('slug') }">
+                                Slug
+                                <span v-if="errors.has('slug')"> (required) </span>
+                            </label>
+                            <input
+                                v-validate="'required'"
+                                v-model.trim.lazy="postSlug"
+                                class="form-control"
+                                type="text"
+                                data-vv-name="slug"
+                                data-vv-as="Slug"
+                            >
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div :class="{ 'border-danger': errors.has('media-url') }" class="form-group form-group-default">
+                            <label :class="{'text-danger': errors.has('media-url') }">
+                                Media Url
+                                <span v-if="errors.has('media-url')"> ({{ errors.first('media-url') }})</span>
+                            </label>
+                            <input
+                                v-validate="'required'"
+                                v-model.trim.lazy="postMediaUrl"
+                                type="url"
+                                placeholder="https://www.mordor.com"
+                                pattern="https://.*"
+                                size="30"
+                                class="form-control"
+                                data-vv-name="media-url"
+                                data-vv-as="Media Url"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label :class="{ 'text-danger': errors.has('summary') }">
+                                Summary
+                                <span v-if="errors.has('summary')">(required)</span>
+                            </label>
+                            <quill-wrapper
+                                v-validate="'required'"
+                                :class="{ 'border-danger': errors.has('summary') }"
+                                v-model="postSummary"
+                                data-vv-name="summary"
+                                name="summary"
+                                data-vv-as="Body"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label :class="{ 'text-danger': errors.has('content') }">
+                                Content
+                                <span v-if="errors.has('content')">(required)</span>
+                            </label>
+                            <quill-wrapper
+                                v-validate="'required'"
+                                :class="{ 'border-danger': errors.has('content') }"
+                                v-model="postContent"
+                                class="post-content"
+                                data-vv-name="content"
+                                name="content"
+                                data-vv-as="Body"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md">
+                        <div class="form-group-multiselect">
+                            <label :class="{'text-danger': errors.has('category') }">
+                                Category
+                                <span v-if="errors.has('category')">(required)</span>
+                            </label>
+                            <multiselect-wrapper
+                                id="name"
+                                v-model="postCategory"
+                                :endpoint="categoryEndpoint"
+                                :multiselect-props="categoryMultiselectProps"
+                                :class="{'border-danger': errors.has('category')}"
+                                data-vv-as="Category"
+                                data-vv-name="category"
+                            >
+                                <template slot="beforeList" >
+                                    <div class="add-author-button option__desc" @click="$modal.show('post-category-modal', { action: 'Post/updateCategory' })">
+                                        <i class="fa fa-plus" />Add Category
+                                    </div>
+                                </template>
+                            </multiselect-wrapper>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md">
+                        <div class="form-group-multiselect">
+                            <label>
+                                Type
+                            </label>
+                            <multiselect-wrapper
+                                id="title"
+                                v-model.lazy="postType"
+                                :endpoint="postTypeEndpoint"
+                                :multiselect-props="postTypeMultiselectProps"
+                            >
+                                <template slot="beforeList" >
+                                    <div class="add-author-button option__desc" @click="$modal.show('post-type-modal', { action: 'Post/updateType' })">
+                                        <i class="fa fa-plus" />Add Type
+                                    </div>
+                                </template>
+                        </multiselect-wrapper></div>
+                    </div>
+                    <div class="col-12 col-md">
+                        <div class="form-group-multiselect">
+                            <label>
+                                Tags
+                            </label>
+                            <multiselect-wrapper
+                                id="title"
+                                v-model.lazy="postTags"
+                                :endpoint="postTagsEndpoint"
+                                :multiselect-props="postTagsMultiselectProps"
+                            >
+                                <template slot="beforeList" >
+                                    <div class="add-author-button option__desc" @click="$modal.show('post-tag-modal', { action: 'Post/updateTag' })">
+                                        <i class="fa fa-plus" />Add Tag
+                                    </div>
+                                </template>
+                            </multiselect-wrapper>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <h3 class="title">Publishing Options</h3>
+                </div>
+            </div>
+            <post-publishing-options featured-label="Featured Post" store-name="Post"/>
+
+            <div class="row float-right">
+                <div class="m-2">
+                    <button
+                        :disabled="isLoading"
+                        :title="isLoading ? 'Processing, wait a moment...' : 'Save'"
+                        :class="{ 'deactivated': isLoading }"
+                        class="btn m-1 btn-primary float-right"
+                    >
+                        Save
+                    </button>
+                    <router-link
+                        :to="{ name: 'browse', params: { resource: 'book-insights'} }"
+                        :disabled="isLoading"
+                        :title="isLoading ? 'Processing, wait a moment...' : 'Cancel'"
+                        class="btn m-1 btn-danger float-right"
+                    >
+                        Cancel
+                    </router-link>
+                </div>
+            </div>
+        </form>
+    </div>
+
 </template>
 <script>
-import { mapState } from "vuex";
 
+import { mapState } from "vuex";
+// import postPublishingOptions from "@c/forms/publishing-options.vue";
 
 export default {
     components: {
         quillWrapper: () => import(/* webpackChunkName: "quill-wrapper" */ "@c/quill-wrapper/quill-wrapper"),
-        multiselectWrapper: () => import(/* webpackChunkName: "multiselect-wrapper" */ "@c/multiselect-wrapper/multiselect-wrapper")
+        multiselectWrapper: () => import(/* webpackChunkName: "multiselect-wrapper" */ "@c/multiselect-wrapper/multiselect-wrapper"),
+        postCategoryModal: () => import(/* webpackChunkName: "category-modal" */ "@c/modals/posts/category-modal"),
+        postTagModal: () => import(/* webpackChunkName: "tag-modal" */ "@c/modals/posts/tag-modal"),
+        postTypeModal: () => import(/* webpackChunkName: "tag-modal" */ "@c/modals/posts/type-modal"),
+        postPublishingOptions: () => import(/* webpackChunkName: "post-publishing-options" */ "@c/forms/publishing-options.vue")
     },
     data() {
         return {
@@ -204,7 +233,8 @@ export default {
     computed: {
         ...mapState({
             isLoading: state => state.Application.isLoading,
-            post: state => state.Post.data
+            post: state => state.Post.data,
+            tags: state => state.Tags.data
         }),
         postTitle: {
             get() {
@@ -212,6 +242,7 @@ export default {
             },
             set(title) {
                 this.$store.commit("Post/SET_TITLE", title);
+                this.$store.dispatch("Post/saveSluggedTitle", title);
             }
         },
         postSlug: {
@@ -219,7 +250,7 @@ export default {
                 return this.$store.state.Post.data.slug;
             },
             set(slug) {
-                this.$store.commit("Post/SET_SLUG", slug);
+                this.$store.dispatch("Post/saveSluggedTitle", slug);
             }
         },
         postMediaUrl: {
@@ -264,17 +295,25 @@ export default {
         },
         postTags: {
             get() {
-                return this.$store.state.Post.data.tags;
+                const tagIds = this.$store.state.Post.data.tags;
+                return tagIds.map((id) => this.tags.find(tags => id === tags.id));
             },
             set(tags) {
-                this.$store.commit("Post/SET_POST_TAGS", tags);
+                const tagIds = tags.map(tag => tag.id);
+                this.$store.commit("Post/SET_POST_TAGS", tagIds);
             }
         }
     },
     created() {
         if (this.isEditing()) {
-            this.$store.dispatch("Post/updateCurrent", this.$route.params.id)
+            this.$store.dispatch("Post/updateData", this.$route.params.id)
+            return;
         }
+        this.$store.dispatch("Tags/updateData");
+
+    },
+    beforeDestroy() {
+        this.$store.dispatch("Post/cleanUp");
     },
     methods: {
         async submitForm() {
