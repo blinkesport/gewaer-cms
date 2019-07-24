@@ -225,7 +225,8 @@ export default {
 
             postTagsEndpoint: "tags",
             postTagsMultiselectProps: {
-                "multiple": true
+                "multiple": true,
+                "label": "title"
             },
             postsEndpoint: "posts"
         }
