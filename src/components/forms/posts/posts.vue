@@ -141,7 +141,6 @@
                         <multiselect-wrapper
                             id="title"
                             v-model.lazy="postTags"
-                            :exclude-option-id="$route.params.id"
                             :endpoint="postTagsEndpoint"
                             :multiselect-props="postTagsMultiselectProps"
                         />
@@ -196,7 +195,8 @@ export default {
 
             postTagsEndpoint: "tags",
             postTagsMultiselectProps: {
-                "multiple": true
+                "multiple": true,
+                "label": "title"
             },
             postsEndpoint: "posts"
         }
@@ -267,6 +267,7 @@ export default {
                 return this.$store.state.Post.data.tags;
             },
             set(tags) {
+                debugger;
                 this.$store.commit("Post/SET_POST_TAGS", tags);
             }
         }
