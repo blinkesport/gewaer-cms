@@ -32,9 +32,9 @@
                         v-model="publishedStatus"
                         :show-labels="false"
                         :allow-empty="false"
-                        :options="statusList"
+                        :options="postStatusList"
                         track-by="id"
-                        label="label"
+                        label="title"
                     />
                 </div>
             </div>
@@ -62,6 +62,7 @@ import lang from "element-ui/lib/locale/lang/en"
 import locale from "element-ui/lib/locale"
 locale.use(lang);
 import moment from "moment";
+import { mapState } from "vuex";
 
 export default {
     name: "PublishingOptions",
@@ -102,6 +103,9 @@ export default {
         };
     },
     computed: {
+        ...mapState({
+            postStatusList: state => state.PostStatus.data
+        }),
         isScheduled() {
             return this.$store.getters["Post/isScheduled"];
         },
@@ -133,15 +137,16 @@ export default {
         },
         publishedStatus: {
             get() {
-                const remoteStatus = Number(this.$store.state[this.storeName].data.status);
-                return this.statusList.find((status) => {
-                    return remoteStatus === status.id
+                const remoteStatusId = this.$store.state[this.storeName].data.status;
+                const a = this.postStatusList.find((status) => {
+                    return remoteStatusId === status.id
                 });
+                return a;
             },
             set(status) {
                 const draftStatus = 1;
                 if (status.id == draftStatus) {
-                    this.$store.commit("BookInsight/SET_PUBLISHED_AT", null);
+                    this.$store.commit(`${this.storeName}/SET_PUBLISHED_AT`, null);
                 } else {
                     const publishedAt = moment.utc().format("YYYY-MM-DD HH:mm:ss");
                     this.$store.commit(`${this.storeName}/SET_PUBLISHED_AT`, publishedAt);

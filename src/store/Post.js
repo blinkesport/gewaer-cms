@@ -1,24 +1,11 @@
 import axios from "axios";
+import cloneDeep from "lodash/cloneDeep";
+import isEmpty from "lodash/isEmpty";
+import store from "../store";
 const slugify = require("@sindresorhus/slugify");
 
-const state = {
-    // data: {
-    //     title: "",
-    //     slug: "",
-    //     summary: "",
-    //     content: "",
-    //     category: "",
-    //     post_type: "",
-    //     tags: [],
-    //     media_url: "",
-    //     files: [],
-    //     // status box
-    //     status: 1,
-    //     published_at: null,
-    //     premium: 0,
-    //     featured: 0
-    // },
 
+const state = {
     data: {
         "id": 0,
         "users_id": [],
@@ -46,7 +33,8 @@ const state = {
         "created_at": "",
         "updated_at": "",
         "is_deleted": "",
-        "tags": []
+        "tags": [],
+        files: []
     }
 }
 
@@ -98,16 +86,19 @@ const mutations = {
 }
 
 const actions = {
-    // TODO: rename to update data
     updateData({ commit, dispatch }, id) {
+
         dispatch("Tags/updateData", null, { root: true });
         dispatch("Categories/updateData", null, { root: true });
         dispatch("PostTypes/updateData", null, { root: true });
+        dispatch("PostStatus/updateData", null, { root: true });
+
+        dispatch("Application/showLoader", true, { root: true });
         dispatch("getData", id).then(({ data: post }) => {
             commit("SET_POST", post);
+            dispatch("Application/showLoader", false, { root: true });
         });
     },
-    // TODO: rename to get data
     getData(_, id) {
         return axios({ url: `/posts/${id}` });
     },
@@ -143,16 +134,41 @@ const actions = {
             "created_at": "",
             "updated_at": "",
             "is_deleted": "",
-            "tags": []
+            "tags": [],
+            "files": []
         }
         commit("SET_POST", data);
+    },
+    addFiles({ commit, state }, files) {
+        if (!files.length) {
+            return;
+        }
+
+        const currentFiles = state.data.files;
+        const newFiles = files.map((file) => {
+            return {
+                id: null,
+                filesystem_id: file.id,
+                url: file.url
+            }
+        });
+        const mergedFiles = [...currentFiles, ...newFiles]
+        commit("SET_FILES", mergedFiles);
+    },
+    spliceFilesByIndex({ commit, state }, index) {
+        const clonedFiles = cloneDeep(state.data.files);
+        clonedFiles.splice(index, 1);
+        commit("SET_FILES", clonedFiles);
     }
 }
 
 const getters = {
     isScheduled(state) {
-        const SCHEDULE_STATUS_ID = 2;
-        return Number(state.data.status) === SCHEDULE_STATUS_ID;
+        const scheduledStatus = store.getters["PostStatus/scheduledStatus"];
+        if (!isEmpty(scheduledStatus)) {
+            return state.data.status === scheduledStatus.id;
+        }
+        return false;
     }
 }
 

@@ -1,6 +1,6 @@
 <template>
     <div class="create-resource">
-        <h4 class="section-title p-l-10">Create {{ currentResource.title }}</h4>
+        <h4 class="section-title p-l-10"> {{ resourceTitle }}</h4>
         <div class="card">
             <div class="card-block">
                 <!-- <form class="resource-form" novalidate/> -->
@@ -25,23 +25,24 @@ export default {
     },
     computed: {
         ...mapState({
-            companyData: state => state.Company.data
-        })
+            applicationResources: state => state.Application.resources
+        }),
+        isEditing() {
+            return this.$route.params.id;
+        },
+        resourceTitle() {
+            return this.isEditing ? "Edit" : "Create";
+        }
     },
     created() {
         this.setResource(this.$route.params.resource);
     },
     methods: {
         setResource(resourceName) {
-            if (!this.companyData.resources) {
-                return;
-            }
-
-            const resourceIndex = this.companyData.resources.findIndex(resource => {
-                return resource.name == resourceName;
+            const resourceIndex = this.applicationResources.findIndex(resource => {
+                return resource.name.toLowerCase() == resourceName;
             });
-
-            this.currentResource = this.companyData.resources[resourceIndex];
+            this.currentResource = this.applicationResources[resourceIndex];
         }
     }
 }

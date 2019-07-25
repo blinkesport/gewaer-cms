@@ -12,7 +12,7 @@
 import Quill from "quill";
 
 export default {
-    name: "EditorComponent",
+    name: "QuillWrapper",
     props: {
         value: {
             type: null,

@@ -35,6 +35,11 @@ const actions = {
                 dispatch("setList", data);
             }).finally(() => resolve());
         });
+    },
+    getResources() {
+        return axios({
+            url: "/system-modules"
+        });
     }
 };
 
