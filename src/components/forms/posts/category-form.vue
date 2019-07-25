@@ -6,14 +6,33 @@
         @submit.prevent="sendCategory">
         <div class="row">
             <div class="col">
-                <div :class="{ 'border-danger': errors.has('slug') }" class="form-group form-group-default">
-                    <label :class="{'text-danger': errors.has('slug') }">
+                <div :class="{ 'border-danger': errors.has('title') }" class="form-group form-group-default">
+                    <label :class="{'text-danger': errors.has('title') }">
                         Title
-                        <span v-if="errors.has('slug')">(required)</span>
+                        <span v-if="errors.has('title')">(required)</span>
                     </label>
                     <input
                         v-validate="'required'"
                         v-model="category.title"
+                        data-vv-as="Title"
+                        data-vv-name="title"
+                        autofocus
+                        class="form-control"
+                        type="text"
+                    >
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div :class="{ 'border-danger': errors.has('slug') }" class="form-group form-group-default">
+                    <label :class="{'text-danger': errors.has('slug') }">
+                        Slug
+                        <span v-if="errors.has('slug')">(required)</span>
+                    </label>
+                    <input
+                        v-validate="'required'"
+                        v-model="category.slug"
                         data-vv-as="Slug"
                         data-vv-name="slug"
                         autofocus

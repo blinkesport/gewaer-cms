@@ -2,7 +2,7 @@
     <gw-browse
         ref="gwBrowse"
         :append-params="appendParams"
-        :http-options="{ baseURL, headers: { Authorization: token }}"
+        :http-options="{ baseURL, headers: { Authorization: token, 'Site-Key': siteKey }}"
         :pagination-data="paginationData"
         :query-params="queryParams"
         :resources="resources"
@@ -49,7 +49,8 @@ export default {
                 page: "page",
                 perPage: "limit"
             },
-            token: this.$store.state.User.token || Cookies.get("token")
+            token: this.$store.state.User.token || Cookies.get("token"),
+            siteKey: process.env.VUE_APP_SITE_KEY
         }
     },
     computed: {

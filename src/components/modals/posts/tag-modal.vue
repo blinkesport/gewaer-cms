@@ -28,6 +28,8 @@ export default {
     },
     methods: {
         onFormSaved(tag) {
+            this.$store.dispatch("Tags/updateData");
+
             if (this.action) {
                 this.$store.dispatch(this.action, tag);
             }

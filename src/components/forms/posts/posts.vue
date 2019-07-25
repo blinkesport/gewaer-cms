@@ -28,6 +28,8 @@
                             >
                         </div>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col">
                         <div :class="{ 'border-danger': errors.has('slug') }" class="form-group form-group-default">
                             <label :class="{'text-danger': errors.has('slug') }">
@@ -41,25 +43,6 @@
                                 type="text"
                                 data-vv-name="slug"
                                 data-vv-as="Slug"
-                            >
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div :class="{ 'border-danger': errors.has('media-url') }" class="form-group form-group-default">
-                            <label :class="{'text-danger': errors.has('media-url') }">
-                                Media Url
-                                <span v-if="errors.has('media-url')"> ({{ errors.first('media-url') }})</span>
-                            </label>
-                            <input
-                                v-validate="'required'"
-                                v-model.trim.lazy="postMediaUrl"
-                                type="url"
-                                placeholder="https://www.mordor.com"
-                                pattern="https://.*"
-                                size="30"
-                                class="form-control"
-                                data-vv-name="media-url"
-                                data-vv-as="Media Url"
                             >
                         </div>
                     </div>
@@ -102,6 +85,27 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col">
+                        <div :class="{ 'border-danger': errors.has('media-url') }" class="form-group form-group-default">
+                            <label :class="{'text-danger': errors.has('media-url') }">
+                                Media Url
+                                <span v-if="errors.has('media-url')"> ({{ errors.first('media-url') }})</span>
+                            </label>
+                            <input
+                                v-validate="'required'"
+                                v-model.trim.lazy="postMediaUrl"
+                                type="url"
+                                placeholder="https://www.mordor.com"
+                                pattern="https://.*"
+                                size="30"
+                                class="form-control"
+                                data-vv-name="media-url"
+                                data-vv-as="Media Url"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-12 col-md">
                         <div class="form-group-multiselect">
                             <label :class="{'text-danger': errors.has('category') }">
@@ -109,7 +113,7 @@
                                 <span v-if="errors.has('category')">(required)</span>
                             </label>
                             <multiselect-wrapper
-                                id="name"
+                                id="title"
                                 v-model="postCategory"
                                 :endpoint="categoryEndpoint"
                                 :multiselect-props="categoryMultiselectProps"
@@ -118,7 +122,7 @@
                                 data-vv-name="category"
                             >
                                 <template slot="beforeList" >
-                                    <div class="add-author-button option__desc" @click="$modal.show('post-category-modal', { action: 'Post/updateCategory' })">
+                                    <div class="add-author-button option__desc" @click="$modal.show('post-category-modal', { action: '' })">
                                         <i class="fa fa-plus" />Add Category
                                     </div>
                                 </template>
@@ -155,7 +159,7 @@
                                 :multiselect-props="postTagsMultiselectProps"
                             >
                                 <template slot="beforeList" >
-                                    <div class="add-author-button option__desc" @click="$modal.show('post-tag-modal', { action: 'Post/updateTag' })">
+                                    <div class="add-author-button option__desc" @click="$modal.show('post-tag-modal', { action: '' })">
                                         <i class="fa fa-plus" />Add Tag
                                     </div>
                                 </template>
@@ -214,13 +218,14 @@ export default {
         return {
             categoryEndpoint: "categories",
             categoryMultiselectProps: {
-                "trackBy": "id",
-                "label": "name"
+                "single": true,
+                "label": "title"
             },
 
-            postTypeEndpoint: "type",
+            postTypeEndpoint: "posts-types",
             postTypeMultiselectProps: {
-                "multiple": true
+                "single": true,
+                "label": "title"
             },
 
             postTagsEndpoint: "tags",
@@ -235,7 +240,9 @@ export default {
         ...mapState({
             isLoading: state => state.Application.isLoading,
             post: state => state.Post.data,
-            tags: state => state.Tags.data
+            tags: state => state.Tags.data,
+            categories: state => state.Categories.data,
+            postTypes: state => state.PostTypes.data
         }),
         postTitle: {
             get() {
@@ -280,18 +287,20 @@ export default {
         },
         postCategory: {
             get() {
-                return this.$store.state.Post.data.category;
+                const categoryId = this.$store.state.Post.data.categories_id;
+                return this.categories.find(category => category.id === categoryId);
             },
             set(category) {
-                this.$store.commit("Post/SET_CATEGORY", category);
+                this.$store.commit("Post/SET_CATEGORY", category.id);
             }
         },
         postType: {
             get() {
-                return this.$store.state.Post.data.post_type;
+                const typeId = this.$store.state.Post.data.types_id;
+                return this.postTypes.find(type => type.id === typeId);
             },
             set(type) {
-                this.$store.commit("Post/SET_POST_TYPE", type);
+                this.$store.commit("Post/SET_POST_TYPE", type.id);
             }
         },
         postTags: {
@@ -311,7 +320,6 @@ export default {
             return;
         }
         this.$store.dispatch("Tags/updateData");
-
     },
     beforeDestroy() {
         this.$store.dispatch("Post/cleanUp");
@@ -321,8 +329,8 @@ export default {
             const isFormValid = await this.validateFields();
             if (isFormValid) {
                 this.$store.commit("Application/SET_IS_LOADING", true);
-                const url = this.isEditing ? `${this.postsEndpoint}/${this.$route.params.id}` : this.postsEndpoint;
-                const method = this.isEditing ? "PUT" : "POST";
+                const url = this.isEditing() ? `${this.postsEndpoint}/${this.$route.params.id}` : this.postsEndpoint;
+                const method = this.isEditing() ? "PUT" : "POST";
 
                 axios({
                     url,
@@ -361,5 +369,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+// .post-content {
+//     height: 300px;
+// }
 </style>

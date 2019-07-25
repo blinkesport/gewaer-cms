@@ -10,12 +10,12 @@ const mutations = {
 
 const actions = {
     getData() {
-        return axios({ url: "/tags" });
+        return axios({ url: "/posts-types" });
     },
     updateData({ commit, dispatch }) {
         return new Promise((resolve) => {
-            dispatch("getData").then(({ data: tags }) => {
-                commit("SET_DATA", tags);
+            dispatch("getData").then(({ data: postTypes }) => {
+                commit("SET_DATA", postTypes);
             }).finally(() => resolve());
         });
     }

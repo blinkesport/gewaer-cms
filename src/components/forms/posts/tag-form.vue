@@ -86,8 +86,7 @@ export default {
             tag: {
                 id: null,
                 title: "",
-                slug: "",
-                sites_id: "1"
+                slug: ""
             }
         };
     },
@@ -144,7 +143,7 @@ export default {
                     method,
                     data: this.tag
                 }).then(({ data: newPostTag }) => {
-                    this.$emit("tag-form-saved", newPostTag);
+                    this.$emit("post-tag-form-saved", newPostTag);
                     this.$notify({
                         text: "Post Tag form saved successfully.",
                         type: "success"
