@@ -44,14 +44,15 @@
 </template>
 
 <script>
+
 const { AppHeader, AppSidebar } = require(`./import.${process.env.VUE_APP_IMPORTS}`);
 
+// TODO: lazy load all this
 import { mapActions, mapGetters, mapState } from "vuex";
 import { AbilityBuilder } from "@casl/ability";
 import AfterSignupWizard from "@/components/modals/after-signup-wizard";
 import BasicModal from "@/components/modals/basic-modal";
 import FreeTrialBar from "@/views/layout/free-trial-banner";
-import FullscreenLoader from "@c/fullscreen-loader";
 import NotificationCenter from "@/views/layout/notification-center";
 
 export default {
@@ -61,8 +62,8 @@ export default {
         AppSidebar,
         BasicModal,
         FreeTrialBar,
-        FullscreenLoader,
-        NotificationCenter
+        NotificationCenter,
+        fullscreenLoader: () => import(/* webpackChunkName: "hb-fullscreen-loader"*/ "@c/fullscreen-loader/fullscreen-loader.vue")
     },
     data() {
         return {

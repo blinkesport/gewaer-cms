@@ -10,7 +10,8 @@ const state = {
     locales: [],
     currencies: [],
     roles: [],
-    resources: []
+    resources: [],
+    showLoader: false
 };
 
 const mutations = {
@@ -37,6 +38,9 @@ const mutations = {
     },
     SET_ROLES(state, payload) {
         state.roles = payload;
+    },
+    SHOW_LOADER(state, shouldShow) {
+        state.showLoader = shouldShow;
     }
 };
 
@@ -46,8 +50,9 @@ const actions = {
             url: `/apps/${process.env.VUE_APP_APPLICATION_KEY}/settings`
         }).then(response => {
             commit("SET_DATA", response.data);
+        }).finally(() => {
             commit("SET_IS_LOADING", false);
-        });
+        })
     },
     getGlobalStateData({ dispatch }) {
         if (!Cookies.get("token") || !isValidJWT(Cookies.get("token"))) {
@@ -67,6 +72,9 @@ const actions = {
                 resources: response[2].data
             });
         });
+    },
+    showLoader({ commit }, shouldShow) {
+        commit("SHOW_LOADER", shouldShow);
     },
     getLanguages({ commit }) {
         if (!state.languages.length) {
@@ -166,6 +174,9 @@ const getters = {
     },
     isStateReady() {
         return !isEmpty(store.User.state.data) && !!store.Company.state.data;
+    },
+    isLoading() {
+        return state.showLoader;
     }
 };
 
