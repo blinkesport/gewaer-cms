@@ -12,7 +12,7 @@ const state = {
         "sites_id": "1",
         "companies_id": "",
         "types_id": "1",
-        "categories_id": 0,
+        "category_id": 0,
         "title": "",
         "slug": "",
         "summary": "",
@@ -56,7 +56,7 @@ const mutations = {
     },
     // TODO: rename to CATEGORY_ID
     SET_CATEGORY(state, category) {
-        state.data.categories_id = category;
+        state.data.category_id = category;
     },
     // TODO: rename to POST_TYPES_ID
     SET_POST_TYPE(state, type) {
@@ -113,7 +113,7 @@ const actions = {
             "sites_id": 1,
             "companies_id": "",
             "types_id": "1",
-            "categories_id": 0,
+            "category_id": 0,
             "title": "",
             "slug": "",
             "summary": "",

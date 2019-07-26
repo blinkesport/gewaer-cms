@@ -346,7 +346,7 @@ export default {
         },
         postCategory: {
             get() {
-                const categoryId = this.$store.state.Post.data.categories_id;
+                const categoryId = this.$store.state.Post.data.category_id;
                 return this.categories.find(category => category.id === categoryId);
             },
             set(category) {
