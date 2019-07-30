@@ -144,6 +144,7 @@ export default {
                     data: this.tag
                 }).then(({ data: newPostTag }) => {
                     this.$emit("post-tag-form-saved", newPostTag);
+                    this.$store.dispatch("Tags/updateData");
                     this.$notify({
                         text: "Post Tag form saved successfully.",
                         type: "success"

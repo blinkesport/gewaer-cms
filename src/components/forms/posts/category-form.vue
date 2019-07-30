@@ -122,6 +122,7 @@ export default {
                     data: this.category
                 }).then(({ data: newPostCategory }) => {
                     this.$emit("post-category-form-saved", newPostCategory);
+                    this.$store.dispatch("Categories/updateData");
                     this.$notify({
                         text: "Post Category form saved successfully.",
                         type: "success"
@@ -134,8 +135,6 @@ export default {
                 }).finally(() => {
                     this.isLoading = false;
                 });
-            } else {
-                // this.$_focusOnError();
             }
         },
         cancelForm() {
@@ -143,7 +142,6 @@ export default {
                 this.$emit("form-cancelled");
                 return;
             }
-            // this.$router.push({ name: "browse", params: { resource: "search-terms" } })
         }
     }
 }
