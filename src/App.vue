@@ -101,7 +101,7 @@ export default {
             }
         }
     },
-    created() {
+    async created() {
         await this.getAppData();
         this.appBaseColor = this.appSettings.settings.base_color || this.appBaseColor;
         this.appSecondaryColor = this.appSettings.settings.secondary_color || this.appSecondaryColor;
