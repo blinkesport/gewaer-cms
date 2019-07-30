@@ -251,6 +251,7 @@
 
 import { mapState } from "vuex";
 import validationMixins from "@/mixins/validationMixins";
+import isEmpty from "lodash/isEmpty";
 
 export default {
     components: {
@@ -270,13 +271,11 @@ export default {
                 "single": true,
                 "label": "title"
             },
-
             postTypeEndpoint: "posts-types",
             postTypeMultiselectProps: {
                 "single": true,
                 "label": "title"
             },
-
             postTagsEndpoint: "tags",
             postTagsMultiselectProps: {
                 "multiple": true,
@@ -355,11 +354,12 @@ export default {
         },
         postType: {
             get() {
-                const typeId = this.$store.state.Post.data.types_id;
+                const typeId = this.$store.state.Post.data.post_types_id;
                 return this.postTypes.find(type => type.id === typeId);
             },
             set(type) {
-                this.$store.commit("Post/SET_POST_TYPE", type.id);
+                const postType = isEmpty(type) ? "" : type.id;
+                this.$store.commit("Post/SET_POST_TYPE", postType);
             }
         },
         postTags: {
@@ -387,12 +387,7 @@ export default {
         }
     },
     created() {
-        if (this.isEditing) {
-            this.$store.dispatch("Post/updateData", this.$route.params.id)
-            return;
-        }
-        this.$store.dispatch("Tags/updateData");
-        this.$store.dispatch("PostStatus/updateData");
+        this.$store.dispatch("Post/updateData", this.$route.params.id);
     },
     beforeDestroy() {
         this.$store.dispatch("Post/cleanUp");

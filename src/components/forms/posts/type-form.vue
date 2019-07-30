@@ -94,7 +94,7 @@ export default {
 
             if (areFieldsValid) {
                 this.isLoading = true;
-                const url = this.isEditing ? `/type/${this.$route.params.id}` : "/type";
+                const url = this.isEditing ? `/posts-types/${this.$route.params.id}` : "/posts-types";
                 const method = this.isEditing ? "PUT" : "POST";
 
                 axios({
@@ -103,6 +103,7 @@ export default {
                     data: this.postType
                 }).then(({ data: newPostType }) => {
                     this.$emit("post-type-form-saved", newPostType);
+                    this.$store.dispatch("PostTypes/updateData");
                     this.$notify({
                         text: "Post type form saved successfully.",
                         type: "success"
