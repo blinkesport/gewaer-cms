@@ -58,7 +58,6 @@ const mutations = {
     SET_CATEGORY(state, category) {
         state.data.category_id = category;
     },
-    // TODO: rename to POST_TYPES_ID
     SET_POST_TYPE(state, type) {
         state.data.post_types_id = type;
     },
