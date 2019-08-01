@@ -251,7 +251,8 @@
 
 import { mapState } from "vuex";
 import validationMixins from "@/mixins/validationMixins";
-import isEmpty from "lodash/isEmpty";
+// import isEmpty from "lodash/isEmpty";
+import cloneDeep from "lodash/cloneDeep";
 
 export default {
     components: {
@@ -345,31 +346,26 @@ export default {
         },
         postCategory: {
             get() {
-                const categoryId = this.$store.state.Post.data.category_id;
-                return this.categories.find(category => category.id === categoryId);
+                return this.$store.state.Post.data.category_id;
             },
             set(category) {
-                this.$store.commit("Post/SET_CATEGORY", category.id);
+                this.$store.commit("Post/SET_CATEGORY", category);
             }
         },
         postType: {
             get() {
-                const typeId = this.$store.state.Post.data.post_types_id;
-                return this.postTypes.find(type => type.id === typeId);
+                return this.$store.state.Post.data.post_types_id;
             },
-            set(type) {
-                const postType = isEmpty(type) ? "" : type.id;
+            set(postType) {
                 this.$store.commit("Post/SET_POST_TYPE", postType);
             }
         },
         postTags: {
             get() {
-                const tagIds = this.$store.state.Post.data.tags;
-                return tagIds.map((id) => this.tags.find(tags => id === tags.id));
+                return this.$store.state.Post.data.tags;
             },
             set(tags) {
-                const tagIds = tags.map(tag => tag.id);
-                this.$store.commit("Post/SET_POST_TAGS", tagIds);
+                this.$store.commit("Post/SET_POST_TAGS", tags);
             }
         },
         uppyXhrConfig() {
@@ -393,6 +389,13 @@ export default {
         this.$store.dispatch("Post/cleanUp");
     },
     methods: {
+        fetchCategory(id) {
+            return axios({
+                url: `/categories/${id}`
+            }).then(({ data: category }) => {
+                return category;
+            })
+        },
         async submitForm() {
             const isFormValid = await this.validateFields();
             if (isFormValid) {
@@ -400,10 +403,15 @@ export default {
                 const url = this.isEditing ? `${this.postsEndpoint}/${this.$route.params.id}` : this.postsEndpoint;
                 const method = this.isEditing ? "PUT" : "POST";
 
+                const clonedPost = cloneDeep(this.post);
+                clonedPost.category_id = clonedPost.id;
+                clonedPost.tags = clonedPost.tags.map(tag => tag.id);
+                clonedPost.post_types_id = clonedPost.post_types_id.id;
+
                 axios({
                     url,
                     method,
-                    data: this.post
+                    data: clonedPost
                 }).then(() => {
                     this.$notify({
                         text: "Post saved successfully",

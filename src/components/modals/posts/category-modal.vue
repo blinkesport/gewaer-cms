@@ -9,7 +9,7 @@
             <post-category-form
                 :is-from-modal="true"
                 @form-cancelled="onFormCancelled"
-                @post-category-form-saved="onFormSaved"
+                @form-saved="onFormSaved"
             />
         </div>
     </modal>

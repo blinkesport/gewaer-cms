@@ -1,9 +1,8 @@
 <template>
     <form
-        v-if="category.id || !isEditing"
         class="resource-form"
         novalidate
-        @submit.prevent="sendCategory">
+        @submit.prevent="$_sendResourceForm('/categories')">
         <div class="row">
             <div class="col">
                 <div :class="{ 'border-danger': errors.has('title') }" class="form-group form-group-default">
@@ -13,7 +12,7 @@
                     </label>
                     <input
                         v-validate="'required'"
-                        v-model="category.title"
+                        v-model="resourceData.title"
                         data-vv-as="Title"
                         data-vv-name="title"
                         autofocus
@@ -32,7 +31,7 @@
                     </label>
                     <input
                         v-validate="'required'"
-                        v-model="category.slug"
+                        v-model="resourceData.slug"
                         data-vv-as="Slug"
                         data-vv-name="slug"
                         autofocus
@@ -49,7 +48,7 @@
                     :title="isLoading ? 'Processing, wait a moment...' : 'Cancel'"
                     type="button"
                     class="btn btn-danger"
-                    @click="cancelForm"
+                    @click="$emit('form-cancelled')"
                 >
                     Cancel
                 </button>
@@ -63,86 +62,10 @@
 
 <script>
 
-// import validationMixins from "@/mixins/validationMixins";
+import postFormMixins from "@/mixins/postFormMixins";
 
 export default {
     name: "PostCategoryForm",
-    // mixins: [validationMixins],
-    props: {
-        isEditing: {
-            type: Boolean,
-            default: false
-        },
-        isFromModal: {
-            type: Boolean,
-            default: false
-        }
-    },
-    data() {
-        return {
-            isLoading: false,
-            category: {
-                id: null,
-                title: ""
-            }
-        };
-    },
-    created() {
-        this.isEditing && this.getData();
-    },
-    methods: {
-        getData() {
-            this.isLoading = true;
-
-            axios({
-                url: `/categories/${this.$route.params.id}`,
-                method: "GET"
-            }).then(({ data: category }) => {
-                this.category = category;
-            }).catch(error => {
-                this.$notify({
-                    text: error.response.data.errors.message,
-                    type: "error"
-                });
-            }).finally(() => {
-                this.isLoading = false;
-            });
-        },
-        async sendCategory() {
-            const areFieldsValid = await this.$validator.validateAll();
-
-            if (areFieldsValid) {
-                this.isLoading = true;
-                const url = this.isEditing ? `/categories/${this.$route.params.id}` : "/categories";
-                const method = this.isEditing ? "PUT" : "POST";
-
-                axios({
-                    url,
-                    method,
-                    data: this.category
-                }).then(({ data: newPostCategory }) => {
-                    this.$emit("post-category-form-saved", newPostCategory);
-                    this.$store.dispatch("Categories/updateData");
-                    this.$notify({
-                        text: "Post Category form saved successfully.",
-                        type: "success"
-                    });
-                }).catch(error => {
-                    this.$notify({
-                        text: error.response.data.errors.message,
-                        type: "error"
-                    });
-                }).finally(() => {
-                    this.isLoading = false;
-                });
-            }
-        },
-        cancelForm() {
-            if (this.isFromModal) {
-                this.$emit("form-cancelled");
-                return;
-            }
-        }
-    }
+    mixins: [postFormMixins]
 }
 </script>

@@ -109,7 +109,6 @@ export default {
                         type: "success"
                     });
                 }).catch(error => {
-                    debugger;
                     this.$notify({
                         text: error.response.data.errors.message,
                         type: "error"
@@ -117,8 +116,6 @@ export default {
                 }).finally(() => {
                     this.isLoading = false;
                 });
-            } else {
-                // this.$_focusOnError();
             }
         },
         cancelForm() {
@@ -126,7 +123,6 @@ export default {
                 this.$emit("form-cancelled");
                 return;
             }
-            // this.$router.push({ name: "browse", params: { resource: "search-terms" } })
         }
     }
 }
