@@ -42,7 +42,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.tag-modal {
+.post-tag-modal {
     h3 {
         padding: 0 25px;
         margin: 0;

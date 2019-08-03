@@ -251,7 +251,6 @@
 
 import { mapState } from "vuex";
 import validationMixins from "@/mixins/validationMixins";
-// import isEmpty from "lodash/isEmpty";
 import cloneDeep from "lodash/cloneDeep";
 
 export default {
@@ -346,7 +345,7 @@ export default {
         },
         postCategory: {
             get() {
-                return this.$store.state.Post.data.category_id;
+                return this.$store.state.Post.data.category;
             },
             set(category) {
                 this.$store.commit("Post/SET_CATEGORY", category);
@@ -354,7 +353,7 @@ export default {
         },
         postType: {
             get() {
-                return this.$store.state.Post.data.post_types_id;
+                return this.$store.state.Post.data.type;
             },
             set(postType) {
                 this.$store.commit("Post/SET_POST_TYPE", postType);
@@ -404,9 +403,11 @@ export default {
                 const method = this.isEditing ? "PUT" : "POST";
 
                 const clonedPost = cloneDeep(this.post);
-                clonedPost.category_id = clonedPost.id;
+                clonedPost.category = clonedPost.category.id;
+                // TODO: This prop should not be needed but #teambackend flagged it as required.
+                clonedPost.category_id = clonedPost.category;
                 clonedPost.tags = clonedPost.tags.map(tag => tag.id);
-                clonedPost.post_types_id = clonedPost.post_types_id.id;
+                clonedPost.post_types_id = clonedPost.type.id;
 
                 axios({
                     url,
