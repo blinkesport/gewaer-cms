@@ -43,7 +43,6 @@
 
 <script>
 
-// import validationMixins from "@/mixins/validationMixins";
 import postFormMixins from "@/mixins/postFormMixins";
 export default {
     name: "PostTypeForm",
