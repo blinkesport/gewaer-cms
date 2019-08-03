@@ -13,7 +13,7 @@
                     </label>
                     <input
                         v-validate="'required'"
-                        v-model="tagTitle"
+                        v-model="resourceTitle"
                         data-vv-as="Title"
                         data-vv-name="title"
                         autofocus
@@ -32,7 +32,7 @@
                     </label>
                     <input
                         v-validate="'required'"
-                        v-model="tagSlug"
+                        v-model="resourceSlug"
                         data-vv-as="Slug"
                         data-vv-name="slug"
                         autofocus
@@ -63,67 +63,10 @@
 
 <script>
 
-const slugify = require("@sindresorhus/slugify");
 import postFormMixins from "@/mixins/postFormMixins";
 
 export default {
     name: "PostTagForm",
-    mixins: [postFormMixins],
-    computed: {
-        tagTitle: {
-            get() {
-                return this.tag.title;
-            },
-            set(title) {
-                this.tag.title = title;
-                this.tag.slug = slugify(title);
-            }
-        },
-        tagSlug: {
-            get() {
-                return this.tag.slug;
-            },
-            set(slug) {
-                this.tag.slug = slugify(slug);
-            }
-        }
-    },
-    methods: {
-        // async sendTag() {
-        //     const areFieldsValid = await this.$validator.validateAll();
-
-        //     if (areFieldsValid) {
-        //         this.isLoading = true;
-        //         const url = this.isEditing ? `/tags/${this.$route.params.id}` : "/tags";
-        //         const method = this.isEditing ? "PUT" : "POST";
-
-        //         axios({
-        //             url,
-        //             method,
-        //             data: this.tag
-        //         }).then(({ data: newPostTag }) => {
-        //             this.$emit("post-tag-form-saved", newPostTag);
-        //             this.$store.dispatch("Tags/updateData");
-        //             this.$notify({
-        //                 text: "Post Tag form saved successfully.",
-        //                 type: "success"
-        //             });
-        //         }).catch(error => {
-        //             this.$notify({
-        //                 text: error.response.data.errors.message,
-        //                 type: "error"
-        //             });
-        //         }).finally(() => {
-        //             this.isLoading = false;
-        //         });
-        //     }
-        // },
-        // cancelForm() {
-        //     if (this.isFromModal) {
-        //         this.$emit("form-cancelled");
-        //         return;
-        //     }
-        // }
-    }
+    mixins: [postFormMixins]
 }
 </script>

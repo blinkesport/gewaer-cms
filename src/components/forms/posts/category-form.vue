@@ -2,7 +2,8 @@
     <form
         class="resource-form"
         novalidate
-        @submit.prevent="$_sendResourceForm('/categories')">
+        @submit.prevent="$_sendResourceForm('/categories')"    
+    >
         <div class="row">
             <div class="col">
                 <div :class="{ 'border-danger': errors.has('title') }" class="form-group form-group-default">
@@ -12,7 +13,7 @@
                     </label>
                     <input
                         v-validate="'required'"
-                        v-model="resourceData.title"
+                        v-model="resourceTitle"
                         data-vv-as="Title"
                         data-vv-name="title"
                         autofocus
@@ -31,7 +32,7 @@
                     </label>
                     <input
                         v-validate="'required'"
-                        v-model="resourceData.slug"
+                        v-model="resourceSlug"
                         data-vv-as="Slug"
                         data-vv-name="slug"
                         autofocus

@@ -1,9 +1,8 @@
 <template>
     <form
-        v-if="postType.id || !isEditing"
         class="resource-form"
         novalidate
-        @submit.prevent="sendPostTypeForm">
+        @submit.prevent="$_sendResourceForm('/posts-types')">
         <div class="row">
             <div class="col">
                 <div :class="{ 'border-danger': errors.has('title') }" class="form-group form-group-default">
@@ -13,7 +12,7 @@
                     </label>
                     <input
                         v-validate="'required'"
-                        v-model="postType.title"
+                        v-model="resourceTitle"
                         data-vv-as="Title"
                         data-vv-name="title"
                         autofocus
@@ -30,7 +29,7 @@
                     :title="isLoading ? 'Processing, wait a moment...' : 'Cancel'"
                     type="button"
                     class="btn btn-danger"
-                    @click="cancelForm"
+                    @click="$emit('form-cancelled')"
                 >
                     Cancel
                 </button>
@@ -45,85 +44,9 @@
 <script>
 
 // import validationMixins from "@/mixins/validationMixins";
-
+import postFormMixins from "@/mixins/postFormMixins";
 export default {
     name: "PostTypeForm",
-    // mixins: [validationMixins],
-    props: {
-        isEditing: {
-            type: Boolean,
-            default: false
-        },
-        isFromModal: {
-            type: Boolean,
-            default: false
-        }
-    },
-    data() {
-        return {
-            isLoading: false,
-            postType: {
-                id: null,
-                title: ""
-            }
-        };
-    },
-    created() {
-        this.isEditing && this.getData();
-    },
-    methods: {
-        getData() {
-            this.isLoading = true;
-
-            axios({
-                url: `/categories/${this.$route.params.id}`,
-                method: "GET"
-            }).then(({ data: category }) => {
-                this.category = category;
-            }).catch(error => {
-                this.$notify({
-                    text: error.response.data.errors.message,
-                    type: "error"
-                });
-            }).finally(() => {
-                this.isLoading = false;
-            });
-        },
-        async sendPostTypeForm() {
-            const areFieldsValid = await this.$validator.validateAll();
-
-            if (areFieldsValid) {
-                this.isLoading = true;
-                const url = this.isEditing ? `/posts-types/${this.$route.params.id}` : "/posts-types";
-                const method = this.isEditing ? "PUT" : "POST";
-
-                axios({
-                    url,
-                    method,
-                    data: this.postType
-                }).then(({ data: newPostType }) => {
-                    this.$emit("post-type-form-saved", newPostType);
-                    this.$store.dispatch("PostTypes/updateData");
-                    this.$notify({
-                        text: "Post type form saved successfully.",
-                        type: "success"
-                    });
-                }).catch(error => {
-                    this.$notify({
-                        text: error.response.data.errors.message,
-                        type: "error"
-                    });
-                }).finally(() => {
-                    this.isLoading = false;
-                });
-            }
-        },
-        cancelForm() {
-            if (this.isFromModal) {
-                this.$emit("form-cancelled");
-                return;
-            }
-        }
-    }
+    mixins: [postFormMixins]
 }
 </script>

@@ -1,15 +1,37 @@
+const slugify = require("@sindresorhus/slugify");
+
 export default {
     data() {
         return {
             resourceData: {
                 id: null,
-                title: ""
+                title: "",
+                slug: ""
             },
             isLoading: false
         }
     },
+    computed: {
+        resourceTitle: {
+            get() {
+                return this.resourceData.title;
+            },
+            set(title) {
+                this.resourceData.title = title;
+                this.resourceData.slug = slugify(title);
+            }
+        },
+        resourceSlug: {
+            get() {
+                return this.resourceData.slug;
+            },
+            set(slug) {
+                this.resourceData.slug = slugify(slug);
+            }
+        }
+    },
     methods: {
-        $_resourceExists(endpoint) {
+        $_doesResourceExist(endpoint) {
             if (!this.resourceData.title) {
                 return false;
             }
@@ -24,7 +46,7 @@ export default {
                 }
 
                 this.$notify({
-                    text: `Category "${this.resourceData.title}" already exists.`,
+                    text: `"${this.resourceData.title}" already exists.`,
                     type: "error"
                 });
                 return true;
@@ -43,31 +65,31 @@ export default {
 
             if (areFieldsValid) {
                 this.isLoading = true;
-                const categoryExists = await this.$_resourceExists(endpoint, this.resourceData);
+                const categoryExists = await this.$_doesResourceExist(endpoint, this.resourceData);
 
                 if (categoryExists) {
                     this.$emit("form-cancelled");
                     return;
                 }
 
-                // axios({
-                //     url: endpoint,
-                //     method: "POST",
-                //     data: this.resourceData
-                // }).then(({ data: newlyCreatedResource }) => {
-                //     this.$emit("form-saved", newlyCreatedResource);
-                //     this.$notify({
-                //         text: "Post ${} form saved successfully.",
-                //         type: "success"
-                //     });
-                // }).catch(error => {
-                //     this.$notify({
-                //         text: error.response.data.errors.message,
-                //         type: "error"
-                //     });
-                // }).finally(() => {
-                //     this.isLoading = false;
-                // });
+                axios({
+                    url: endpoint,
+                    method: "POST",
+                    data: this.resourceData
+                }).then(({ data: newlyCreatedResource }) => {
+                    this.$emit("form-saved", newlyCreatedResource);
+                    this.$notify({
+                        text: `${newlyCreatedResource.title} was saved successfully.`,
+                        type: "success"
+                    });
+                }).catch(error => {
+                    this.$notify({
+                        text: error.response.data.errors.message,
+                        type: "error"
+                    });
+                }).finally(() => {
+                    this.isLoading = false;
+                });
             }
         }
     }
