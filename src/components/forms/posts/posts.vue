@@ -388,13 +388,6 @@ export default {
         this.$store.dispatch("Post/cleanUp");
     },
     methods: {
-        fetchCategory(id) {
-            return axios({
-                url: `/categories/${id}`
-            }).then(({ data: category }) => {
-                return category;
-            })
-        },
         async submitForm() {
             const isFormValid = await this.validateFields();
             if (isFormValid) {
