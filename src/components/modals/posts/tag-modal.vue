@@ -9,7 +9,7 @@
             <post-tag-form
                 :is-from-modal="true"
                 @form-cancelled="onFormCancelled"
-                @post-tag-form-saved="onFormSaved"
+                @form-saved="onFormSaved"
             />
         </div>
     </modal>
@@ -42,7 +42,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.tag-modal {
+.post-tag-modal {
     h3 {
         padding: 0 25px;
         margin: 0;
