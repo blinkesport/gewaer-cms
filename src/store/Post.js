@@ -6,7 +6,38 @@ const slugify = require("@sindresorhus/slugify");
 
 
 const state = {
-    data: {}
+    data: {
+        "id": 0,	
+        "users_id": [],	
+        "sites_id": "1",	
+        "companies_id": "",
+        "type": null,
+        "post_types_id": "",	
+        "category": null,
+        "category_id": 0,	
+        "title": "",	
+        "slug": "",	
+        "summary": "",	
+        "content": "",	
+        "media_url":"",	
+        "likes_count": 0,	
+        "post_parent_id": 0,	
+        "shares_count": 0,	
+        "views_count": 0,	
+        "comment_count": 0,	
+        "status": "",	
+        "comment_status": "",	
+        "is_published": "",	
+        "featured": "",	
+        "weight": 0,	
+        "premium": "",	
+        "published_at": "",	
+        "created_at": "",	
+        "updated_at": "",	
+        "is_deleted": "",	
+        "tags": [],	
+        "files": []
+    }    
 }
 
 const mutations = {
@@ -76,7 +107,39 @@ const actions = {
         commit("SET_SLUG", slugifiedTitle);
     },
     cleanUp({ commit }) {
-        commit("SET_POST", {});
+        const data = {
+            "id": 0,	
+            "users_id": [],	
+            "sites_id": "1",	
+            "companies_id": "",
+            "type": null,
+            "post_types_id": "",	
+            "category": null,
+            "category_id": 0,	
+            "title": "",	
+            "slug": "",	
+            "summary": "",	
+            "content": "",	
+            "media_url":"",	
+            "likes_count": 0,	
+            "post_parent_id": 0,	
+            "shares_count": 0,	
+            "views_count": 0,	
+            "comment_count": 0,	
+            "status": "",	
+            "comment_status": "",	
+            "is_published": "",	
+            "featured": "",	
+            "weight": 0,	
+            "premium": "",	
+            "published_at": "",	
+            "created_at": "",	
+            "updated_at": "",	
+            "is_deleted": "",	
+            "tags": [],	
+            "files": []
+        }
+        commit("SET_POST", data);
     },
     addFiles({ commit, state }, files) {
         if (!files.length) {
