@@ -26,6 +26,18 @@
                 </div>
             </div>
             <div class="col-12 col-sm-6 col-md-auto">
+                <div class="switch">
+                    <label class="mb-0 mr-2">Live</label>
+                    <vue-switches
+                        v-model="live"
+                        :selected="live"
+                        :emit-on-mount="false"
+                        class="state-switch mb-0 d-flex align-items-center"
+                        theme="bulma"
+                    />
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-auto">
                 <label class="mb-0 mr-2">Status</label>
                 <div class="form-group-multiselect mb-0">
                     <multiselect
@@ -83,25 +95,6 @@ export default {
             required: true
         }
     },
-    data() {
-        return {
-            // TODO: waiting for endpoint.
-            statusList: [
-                {
-                    id: 1,
-                    label: "Draft"
-                },
-                {
-                    id: 2,
-                    label: "Scheduled"
-                },
-                {
-                    id: 3,
-                    label: "Published"
-                }
-            ]
-        };
-    },
     computed: {
         ...mapState({
             postStatusList: state => state.PostStatus.data
@@ -144,14 +137,23 @@ export default {
                 return a;
             },
             set(status) {
-                const draftStatus = 1;
+                const publishedStatus = 1;
+                const draftStatus = 2;
                 if (status.id == draftStatus) {
                     this.$store.commit(`${this.storeName}/SET_PUBLISHED_AT`, null);
-                } else {
+                } else if (status.id == publishedStatus) {
                     const publishedAt = moment.utc().format("YYYY-MM-DD HH:mm:ss");
                     this.$store.commit(`${this.storeName}/SET_PUBLISHED_AT`, publishedAt);
                 }
                 this.$store.commit(`${this.storeName}/SET_PUBLISHED_STATUS`, status.id);
+            }
+        },
+        live: {
+            get() {
+                return this.$store.state[this.storeName].data.is_live;
+            },
+            set(liveStatus) {
+                this.$store.commit(`${this.storeName}/SET_LIVE_STATUS`, liveStatus);
             }
         }
     }
