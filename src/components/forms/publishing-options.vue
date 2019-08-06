@@ -67,12 +67,6 @@
 
 <script>
 
-import Vue from "vue";
-import { DatePicker } from "element-ui";
-Vue.use(DatePicker);
-import lang from "element-ui/lib/locale/lang/en"
-import locale from "element-ui/lib/locale"
-locale.use(lang);
 import moment from "moment";
 import { mapState } from "vuex";
 
@@ -97,7 +91,9 @@ export default {
     },
     computed: {
         ...mapState({
-            postStatusList: state => state.PostStatus.data
+            postStatusList: state => state.PostStatus.data,
+            postStatusIdList: state => state.PostStatus.statusIds,
+            userTimezone: state => state.User.data.timezone
         }),
         isScheduled() {
             return this.$store.getters["Post/isScheduled"];
@@ -131,17 +127,14 @@ export default {
         publishedStatus: {
             get() {
                 const remoteStatusId = this.$store.state[this.storeName].data.status;
-                const a = this.postStatusList.find((status) => {
+                return this.postStatusList.find((status) => {
                     return remoteStatusId === status.id
                 });
-                return a;
             },
             set(status) {
-                const publishedStatus = 1;
-                const draftStatus = 2;
-                if (status.id == draftStatus) {
+                if (status.id == this.postStatusList.DRAFT) {
                     this.$store.commit(`${this.storeName}/SET_PUBLISHED_AT`, null);
-                } else if (status.id == publishedStatus) {
+                } else if (status.id == this.postStatusList.SCHEDULED) {
                     const publishedAt = moment.utc().format("YYYY-MM-DD HH:mm:ss");
                     this.$store.commit(`${this.storeName}/SET_PUBLISHED_AT`, publishedAt);
                 }

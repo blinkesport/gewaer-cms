@@ -1,6 +1,5 @@
 import axios from "axios";
 import cloneDeep from "lodash/cloneDeep";
-import isEmpty from "lodash/isEmpty";
 import store from "../store";
 const slugify = require("@sindresorhus/slugify");
 
@@ -171,11 +170,7 @@ const actions = {
 
 const getters = {
     isScheduled(state) {
-        const scheduledStatus = store.getters["PostStatus/scheduledStatus"];
-        if (!isEmpty(scheduledStatus)) {
-            return state.data.status === scheduledStatus.id;
-        }
-        return false;
+        return state.data.status === store.getters["PostStatus/statusIds"].SCHEDULED;
     }
 }
 
