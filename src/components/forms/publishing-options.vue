@@ -29,8 +29,8 @@
                 <div class="switch">
                     <label class="mb-0 mr-2">Live</label>
                     <vue-switches
-                        v-model="live"
-                        :selected="live"
+                        v-model="isLive"
+                        :selected="isLive"
                         :emit-on-mount="false"
                         class="state-switch mb-0 d-flex align-items-center"
                         theme="bulma"
@@ -141,9 +141,9 @@ export default {
                 this.$store.commit(`${this.storeName}/SET_PUBLISHED_STATUS`, status.id);
             }
         },
-        live: {
+        isLive: {
             get() {
-                return this.$store.state[this.storeName].data.is_live;
+                return Number(this.$store.state[this.storeName].data.is_live);
             },
             set(liveStatus) {
                 this.$store.commit(`${this.storeName}/SET_LIVE_STATUS`, liveStatus);
