@@ -17,13 +17,18 @@ import Vuetable from "vuetable-2";
 import VuetablePagination from "vuetable-2/src/components/VuetablePagination";
 import Dropdown from "bp-vuejs-dropdown";
 import VTooltip from "v-tooltip";
-
+import { DatePicker } from "element-ui";
 import Loader from "@c/loader";
+import lang from "element-ui/lib/locale/lang/en"
+import locale from "element-ui/lib/locale"
+
 
 Vue.use(AbilitiesPlugin);
 Vue.use(Notifications);
 Vue.use(VModal, { dynamic: true, injectModalsContainer: true });
 Vue.use(VTooltip);
+Vue.use(DatePicker);
+locale.use(lang);
 
 Vue.component("custom-fields-form", CustomFieldsForm);
 Vue.component("dropdown", Dropdown);

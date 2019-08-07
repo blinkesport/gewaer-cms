@@ -1,43 +1,43 @@
 import axios from "axios";
 import cloneDeep from "lodash/cloneDeep";
-import isEmpty from "lodash/isEmpty";
 import store from "../store";
 const slugify = require("@sindresorhus/slugify");
 
 
 const state = {
     data: {
-        "id": 0,	
-        "users_id": [],	
-        "sites_id": "1",	
+        "id": 0,
+        "users_id": [],
+        "sites_id": "1",
         "companies_id": "",
         "type": null,
-        "post_types_id": "",	
+        "post_types_id": "",
         "category": null,
-        "category_id": 0,	
-        "title": "",	
-        "slug": "",	
-        "summary": "",	
-        "content": "",	
-        "media_url":"",	
-        "likes_count": 0,	
-        "post_parent_id": 0,	
-        "shares_count": 0,	
-        "views_count": 0,	
-        "comment_count": 0,	
-        "status": "",	
-        "comment_status": "",	
-        "is_published": "",	
-        "featured": "",	
-        "weight": 0,	
-        "premium": "",	
-        "published_at": "",	
-        "created_at": "",	
-        "updated_at": "",	
-        "is_deleted": "",	
-        "tags": [],	
-        "files": []
-    }    
+        "category_id": 0,
+        "title": "",
+        "slug": "",
+        "summary": "",
+        "content": "",
+        "media_url":"",
+        "likes_count": 0,
+        "post_parent_id": 0,
+        "shares_count": 0,
+        "views_count": 0,
+        "comment_count": 0,
+        "status": "",
+        "comment_status": "",
+        "is_published": "",
+        "featured": "",
+        "weight": 0,
+        "premium": "",
+        "published_at": "",
+        "created_at": "",
+        "updated_at": "",
+        "is_deleted": "",
+        "tags": [],
+        "files": [],
+        "is_live": ""
+    }
 }
 
 const mutations = {
@@ -82,6 +82,9 @@ const mutations = {
     },
     SET_FEATURED_STATUS(state, featuredStatus) {
         state.data.featured = featuredStatus;
+    },
+    SET_LIVE_STATUS(state, liveStatus) {
+        state.data.is_live = liveStatus;
     }
 }
 
@@ -108,36 +111,37 @@ const actions = {
     },
     cleanUp({ commit }) {
         const data = {
-            "id": 0,	
-            "users_id": [],	
-            "sites_id": "1",	
+            "id": 0,
+            "users_id": [],
+            "sites_id": "1",
             "companies_id": "",
             "type": null,
-            "post_types_id": "",	
+            "post_types_id": "",
             "category": null,
-            "category_id": 0,	
-            "title": "",	
-            "slug": "",	
-            "summary": "",	
-            "content": "",	
-            "media_url":"",	
-            "likes_count": 0,	
-            "post_parent_id": 0,	
-            "shares_count": 0,	
-            "views_count": 0,	
-            "comment_count": 0,	
-            "status": "",	
-            "comment_status": "",	
-            "is_published": "",	
-            "featured": "",	
-            "weight": 0,	
-            "premium": "",	
-            "published_at": "",	
-            "created_at": "",	
-            "updated_at": "",	
-            "is_deleted": "",	
-            "tags": [],	
-            "files": []
+            "category_id": 0,
+            "title": "",
+            "slug": "",
+            "summary": "",
+            "content": "",
+            "media_url":"",
+            "likes_count": 0,
+            "post_parent_id": 0,
+            "shares_count": 0,
+            "views_count": 0,
+            "comment_count": 0,
+            "status": "",
+            "comment_status": "",
+            "is_published": "",
+            "featured": "",
+            "weight": 0,
+            "premium": "",
+            "published_at": "",
+            "created_at": "",
+            "updated_at": "",
+            "is_deleted": "",
+            "tags": [],
+            "files": [],
+            "is_live": ""
         }
         commit("SET_POST", data);
     },
@@ -166,11 +170,7 @@ const actions = {
 
 const getters = {
     isScheduled(state) {
-        const scheduledStatus = store.getters["PostStatus/scheduledStatus"];
-        if (!isEmpty(scheduledStatus)) {
-            return state.data.status === scheduledStatus.id;
-        }
-        return false;
+        return state.data.status === store.getters["PostStatus/statusIds"].SCHEDULED;
     }
 }
 
