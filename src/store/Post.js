@@ -37,7 +37,7 @@ const state = {
         "tags": [],
         "files": [],
         "is_live": "",
-        "author_name": ""
+        "author_name": null
     }
 }
 
@@ -87,7 +87,7 @@ const mutations = {
     SET_LIVE_STATUS(state, liveStatus) {
         state.data.is_live = liveStatus;
     },
-    SET_POST_AUTHOR_NAME(state, authorName) {
+    SET_POST_AUTHOR(state, authorName) {
         state.data.author_name = authorName;
     }
 }
@@ -146,7 +146,7 @@ const actions = {
             "tags": [],
             "files": [],
             "is_live": "",
-            "author_name": ""
+            "author_name": null
         }
         commit("SET_POST", data);
     },

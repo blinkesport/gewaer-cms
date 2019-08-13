@@ -49,21 +49,6 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <div class="form-group form-group-default">
-                        <label>
-                            Author Name
-                        </label>
-                        <input
-                            v-model.trim.lazy="postAuthorName"
-                            class="form-control"
-                            type="text"
-                            name="author"
-                        >
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
                     <div class="form-group">
                         <label :class="{ 'text-danger': errors.has('summary') }">
                             Summary
@@ -122,6 +107,20 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-12 col-md">
+                    <div class="form-group-multiselect">
+                        <label>
+                            Author
+                        </label>
+                        <multiselect-wrapper
+                            v-validate="'required'"
+                            id="title"
+                            v-model="postAuthor"
+                            :endpoint="usersEndpoint"
+                            :multiselect-props="categoryMultiselectProps"
+                        />
+                    </div>
+                </div>
                 <div class="col-12 col-md">
                     <div class="form-group-multiselect">
                         <label :class="{'text-danger': errors.has('category') }">
@@ -382,12 +381,12 @@ export default {
                 this.$store.commit("Post/SET_POST_TAGS", tags);
             }
         },
-        postAuthorName: {
+        postAuthor: {
             get() {
                 return this.$store.state.Post.data.author_name;
             },
             set(author) {
-                this.$store.commit("Post/SET_POST_AUTHOR_NAME", author);
+                this.$store.commit("Post/SET_POST_AUTHOR", author);
             }
         },
         uppyXhrConfig() {
