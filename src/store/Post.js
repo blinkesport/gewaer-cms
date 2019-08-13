@@ -36,7 +36,8 @@ const state = {
         "is_deleted": "",
         "tags": [],
         "files": [],
-        "is_live": ""
+        "is_live": "",
+        "author_name": ""
     }
 }
 
@@ -85,6 +86,9 @@ const mutations = {
     },
     SET_LIVE_STATUS(state, liveStatus) {
         state.data.is_live = liveStatus;
+    },
+    SET_POST_AUTHOR_NAME(state, authorName) {
+        state.data.author_name = authorName;
     }
 }
 
@@ -141,7 +145,8 @@ const actions = {
             "is_deleted": "",
             "tags": [],
             "files": [],
-            "is_live": ""
+            "is_live": "",
+            "author_name": ""
         }
         commit("SET_POST", data);
     },
