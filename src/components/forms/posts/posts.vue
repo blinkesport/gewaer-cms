@@ -49,6 +49,21 @@
             </div>
             <div class="row">
                 <div class="col">
+                    <div class="form-group form-group-default">
+                        <label>
+                            Author Name
+                        </label>
+                        <input
+                            v-model.trim.lazy="postAuthorName"
+                            class="form-control"
+                            type="text"
+                            name="author"
+                        >
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
                     <div class="form-group">
                         <label :class="{ 'text-danger': errors.has('summary') }">
                             Summary
@@ -365,6 +380,14 @@ export default {
             },
             set(tags) {
                 this.$store.commit("Post/SET_POST_TAGS", tags);
+            }
+        },
+        postAuthorName: {
+            get() {
+                return this.$store.state.Post.data.author_name;
+            },
+            set(author) {
+                this.$store.commit("Post/SET_POST_AUTHOR_NAME", author);
             }
         },
         uppyXhrConfig() {
