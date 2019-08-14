@@ -3,7 +3,6 @@
         <h4 class="section-title p-l-10"> {{ resourceTitle }}</h4>
         <div class="card">
             <div class="card-block">
-                <!-- <form class="resource-form" novalidate/> -->
                 <component :is="$route.params.resource"/>
             </div>
         </div>
@@ -16,7 +15,8 @@ import { mapState } from "vuex";
 export default {
     name: "CreateResource",
     components: {
-        Posts: () => import(/* webpackChunkName: "posts" */ "@c/forms/posts/posts")
+        posts: () => import(/* webpackChunkName: "posts" */ "@c/forms/posts/posts"),
+        tournamentsMatches: () => import(/* webpackChunkName: "tournaments-matches" */ "@c/forms/match/")
     },
     data() {
         return {

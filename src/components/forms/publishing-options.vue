@@ -69,6 +69,7 @@
 
 import moment from "moment";
 import { mapState } from "vuex";
+import { dateFormats } from "@/utils/helpers";
 
 export default {
     name: "PublishingOptions",
@@ -117,10 +118,10 @@ export default {
         publishedAt: {
             get() {
                 const publishedAt = this.$store.state[this.storeName].data.published_at;
-                return moment.utc(publishedAt).format("YYYY-MM-DD HH:mm:ss");
+                return moment.utc(publishedAt).format(dateFormats.dateTimeStamp);
             },
             set(isPublished) {
-                const publishedAt = moment.utc(isPublished).format("YYYY-MM-DD HH:mm:ss");
+                const publishedAt = moment.utc(isPublished).format(dateFormats.dateTimeStamp);
                 this.$store.commit(`${this.storeName}/SET_PUBLISHED_AT`, publishedAt);
             }
         },
@@ -135,7 +136,7 @@ export default {
                 if (status.id == this.postStatusList.DRAFT) {
                     this.$store.commit(`${this.storeName}/SET_PUBLISHED_AT`, null);
                 } else if (status.id == this.postStatusList.SCHEDULED) {
-                    const publishedAt = moment.utc().format("YYYY-MM-DD HH:mm:ss");
+                    const publishedAt = moment.utc().format(dateFormats.dateTimeStamp);
                     this.$store.commit(`${this.storeName}/SET_PUBLISHED_AT`, publishedAt);
                 }
                 this.$store.commit(`${this.storeName}/SET_PUBLISHED_STATUS`, status.id);
