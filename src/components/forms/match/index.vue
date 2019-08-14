@@ -41,11 +41,6 @@ export default {
         teamsForm: () => import(/* webpackChunkName: "teams-form" */ "@c/forms/match/teams-form"),
         datesForm: () => import(/* webpackChunkName: "dates-form" */ "@c/forms/match/dates-form")
     },
-    data() {
-        return {
-            teamsEndpoint: ""
-        }
-    },
     computed: {
         ...mapState({
             isLoading: state => state.Application.isLoading,
