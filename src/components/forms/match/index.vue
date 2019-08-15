@@ -100,11 +100,8 @@ export default {
                 validations.push(vm.$validator.validateAll());
             });
 
-            return Promise.all(validations).then((validationsResults) => {
-                if (!validationsResults.includes(false)) {
-                    return true;
-                }
-                return false;
+            return Promise.all(validations).then(validationsResults => {
+                return !validationsResults.includes(false);
             });
         }
     }
