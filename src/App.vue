@@ -44,10 +44,8 @@
 </template>
 
 <script>
-
 const { AppHeader, AppSidebar } = require(`./import.${process.env.VUE_APP_IMPORTS}`);
 
-// TODO: lazy load all this
 import { mapActions, mapGetters, mapState } from "vuex";
 import { AbilityBuilder } from "@casl/ability";
 import AfterSignupWizard from "@/components/modals/after-signup-wizard";
@@ -103,10 +101,10 @@ export default {
             }
         }
     },
-    created() {
-        this.getAppData();
-    },
-    mounted() {
+    async created() {
+        await this.getAppData();
+        this.appBaseColor = this.appSettings.settings.base_color || this.appBaseColor;
+        this.appSecondaryColor = this.appSettings.settings.secondary_color || this.appSecondaryColor;
         this.appInitialize();
     },
     methods: {

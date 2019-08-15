@@ -9,7 +9,7 @@
             <post-type-form
                 :is-from-modal="true"
                 @form-cancelled="onFormCancelled"
-                @post-type-form-saved="onFormSaved"
+                @form-saved="onFormSaved"
             />
         </div>
     </modal>

@@ -18,3 +18,7 @@ export function lowercase(value) {
 export function isURL(str) {
     return textIsURL(str);
 }
+
+export const dateFormats = {
+    dateTimeStamp: "YYYY-MM-DD HH:mm:ss"
+}

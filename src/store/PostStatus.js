@@ -1,10 +1,16 @@
 const state = {
-    data: []
+    data: [],
+    statusIds: {}
 }
 
 const mutations = {
     SET_DATA(state, data) {
         state.data = data;
+    },
+    SET_STATUS_IDS(state, statusList) {
+        statusList.forEach(item => {
+            state.statusIds[item.title.toUpperCase()] = item.id
+        });
     }
 }
 
@@ -15,6 +21,7 @@ const actions = {
     updateData({ commit, dispatch }) {
         return new Promise((resolve) => {
             dispatch("getData").then(({ data: postStatus }) => {
+                commit("SET_STATUS_IDS", postStatus);
                 commit("SET_DATA", postStatus);
             }).finally(() => resolve());
         });
@@ -22,8 +29,8 @@ const actions = {
 }
 
 const getters = {
-    scheduledStatus(state) {
-        return state.data.find(status => status.title === "Scheduled");
+    statusIds(state) {
+        return state.statusIds;
     }
 }
 

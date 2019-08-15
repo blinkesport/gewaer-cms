@@ -10,7 +10,7 @@ const mutations = {
 
 const actions = {
     getData() {
-        return axios({ url: "/tags" });
+        return axios({ url: "/tags?&limit=50" });
     },
     updateData({ commit, dispatch }) {
         return new Promise((resolve) => {

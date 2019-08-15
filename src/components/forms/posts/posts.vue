@@ -49,6 +49,21 @@
             </div>
             <div class="row">
                 <div class="col">
+                    <div class="form-group form-group-default">
+                        <label>
+                            Author Name
+                        </label>
+                        <input
+                            v-model.trim.lazy="postAuthorName"
+                            class="form-control"
+                            type="text"
+                            name="author"
+                        >
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
                     <div class="form-group">
                         <label :class="{ 'text-danger': errors.has('summary') }">
                             Summary
@@ -251,7 +266,7 @@
 
 import { mapState } from "vuex";
 import validationMixins from "@/mixins/validationMixins";
-import isEmpty from "lodash/isEmpty";
+import cloneDeep from "lodash/cloneDeep";
 
 export default {
     components: {
@@ -345,31 +360,34 @@ export default {
         },
         postCategory: {
             get() {
-                const categoryId = this.$store.state.Post.data.category_id;
-                return this.categories.find(category => category.id === categoryId);
+                return this.$store.state.Post.data.category;
             },
             set(category) {
-                this.$store.commit("Post/SET_CATEGORY", category.id);
+                this.$store.commit("Post/SET_CATEGORY", category);
             }
         },
         postType: {
             get() {
-                const typeId = this.$store.state.Post.data.post_types_id;
-                return this.postTypes.find(type => type.id === typeId);
+                return this.$store.state.Post.data.type;
             },
-            set(type) {
-                const postType = isEmpty(type) ? "" : type.id;
+            set(postType) {
                 this.$store.commit("Post/SET_POST_TYPE", postType);
             }
         },
         postTags: {
             get() {
-                const tagIds = this.$store.state.Post.data.tags;
-                return tagIds.map((id) => this.tags.find(tags => id === tags.id));
+                return this.$store.state.Post.data.tags;
             },
             set(tags) {
-                const tagIds = tags.map(tag => tag.id);
-                this.$store.commit("Post/SET_POST_TAGS", tagIds);
+                this.$store.commit("Post/SET_POST_TAGS", tags);
+            }
+        },
+        postAuthorName: {
+            get() {
+                return this.$store.state.Post.data.author_name;
+            },
+            set(author) {
+                this.$store.commit("Post/SET_POST_AUTHOR_NAME", author);
             }
         },
         uppyXhrConfig() {
@@ -400,10 +418,17 @@ export default {
                 const url = this.isEditing ? `${this.postsEndpoint}/${this.$route.params.id}` : this.postsEndpoint;
                 const method = this.isEditing ? "PUT" : "POST";
 
+                const clonedPost = cloneDeep(this.post);
+                clonedPost.category = clonedPost.category.id;
+                // TODO: This prop should not be needed but #teambackend flagged it as required.
+                clonedPost.category_id = clonedPost.category;
+                clonedPost.tags = clonedPost.tags.map(tag => tag.id);
+                clonedPost.post_types_id = clonedPost.type.id;
+
                 axios({
                     url,
                     method,
-                    data: this.post
+                    data: clonedPost
                 }).then(() => {
                     this.$notify({
                         text: "Post saved successfully",

@@ -8,23 +8,14 @@
         :resources="resources"
         pagination-path=""
         @load-error="loadError">
-        <template slot="actions" slot-scope="props">
-            <div class="btn-group">
-                <button
-                    type="button"
-                    class="btn btn-primary btn-sm"
-                    @click="editResource(props.rowData.id)"
-                >
-                    Edit
-                </button>
-                <button
-                    type="button"
-                    class="btn btn-danger btn-sm"
-                    @click="confirmDelete(props)"
-                >
-                    Delete
-                </button>
-            </div>
+        <template slot="actions-edit" slot-scope="props">
+            <button
+                type="button"
+                class="btn btn-primary btn-sm"
+                @click="editResource(props.rowData.id)"
+            >
+                Edit
+            </button>
         </template>
     </gw-browse>
 </template>

@@ -1,3 +1,7 @@
+const webpack = require("webpack");
+const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");
+
+
 module.exports = {
     lintOnSave: false,
     css: {
@@ -8,6 +12,10 @@ module.exports = {
         }
     },
     configureWebpack: {
+        plugins: [
+            new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
+            new LodashModuleReplacementPlugin
+        ],
         resolve: {
             alias: {
                 "@c": `${__dirname}/src/components`,

@@ -1,6 +1,5 @@
 import axios from "axios";
 import cloneDeep from "lodash/cloneDeep";
-import isEmpty from "lodash/isEmpty";
 import store from "../store";
 const slugify = require("@sindresorhus/slugify");
 
@@ -11,7 +10,9 @@ const state = {
         "users_id": [],
         "sites_id": "1",
         "companies_id": "",
+        "type": null,
         "post_types_id": "",
+        "category": null,
         "category_id": 0,
         "title": "",
         "slug": "",
@@ -34,7 +35,9 @@ const state = {
         "updated_at": "",
         "is_deleted": "",
         "tags": [],
-        files: []
+        "files": [],
+        "is_live": "",
+        "author_name": ""
     }
 }
 
@@ -54,12 +57,11 @@ const mutations = {
     SET_CONTENT(state, content) {
         state.data.content = content;
     },
-    // TODO: rename to CATEGORY_ID
     SET_CATEGORY(state, category) {
-        state.data.category_id = category;
+        state.data.category = category;
     },
     SET_POST_TYPE(state, type) {
-        state.data.post_types_id = type;
+        state.data.type = type;
     },
     SET_POST_TAGS(state, tags) {
         state.data.tags = tags;
@@ -81,6 +83,12 @@ const mutations = {
     },
     SET_FEATURED_STATUS(state, featuredStatus) {
         state.data.featured = featuredStatus;
+    },
+    SET_LIVE_STATUS(state, liveStatus) {
+        state.data.is_live = liveStatus;
+    },
+    SET_POST_AUTHOR_NAME(state, authorName) {
+        state.data.author_name = authorName;
     }
 }
 
@@ -109,9 +117,11 @@ const actions = {
         const data = {
             "id": 0,
             "users_id": [],
-            "sites_id": 1,
+            "sites_id": "1",
             "companies_id": "",
-            "post_types_id": "1",
+            "type": null,
+            "post_types_id": "",
+            "category": null,
             "category_id": 0,
             "title": "",
             "slug": "",
@@ -134,7 +144,9 @@ const actions = {
             "updated_at": "",
             "is_deleted": "",
             "tags": [],
-            "files": []
+            "files": [],
+            "is_live": "",
+            "author_name": ""
         }
         commit("SET_POST", data);
     },
@@ -163,11 +175,7 @@ const actions = {
 
 const getters = {
     isScheduled(state) {
-        const scheduledStatus = store.getters["PostStatus/scheduledStatus"];
-        if (!isEmpty(scheduledStatus)) {
-            return state.data.status === scheduledStatus.id;
-        }
-        return false;
+        return state.data.status === store.getters["PostStatus/statusIds"].SCHEDULED;
     }
 }
 
