@@ -14,7 +14,7 @@ module.exports = {
     configureWebpack: {
         plugins: [
             new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
-            new LodashModuleReplacementPlugin
+            //new LodashModuleReplacementPlugin
         ],
         resolve: {
             alias: {
