@@ -2,9 +2,9 @@ const state = {
     data: {
         team_a: "",
         team_b: "",
-        start_time: "",
-        end_time: "",
-        third_party_id: 0,
+        start_time: null,
+        end_time: null,
+        third_party_id: null,
         games_id: "1"
     }
 }

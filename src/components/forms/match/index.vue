@@ -57,7 +57,12 @@ export default {
         this.$store.dispatch("Match/cleanData");
     },
     methods: {
-        submitForm() {
+        async submitForm() {
+            const isFormValid = await this.validateFields();
+            if (!isFormValid) {
+                return;
+            }
+
             this.$store.commit("Application/SET_IS_LOADING", true);
             const method = this.isEditing ? "PUT" : "POST";
             const url = this.isEditing ? `/tournaments-matches/${this.$route.params.id}` : `/tournaments-matches`;
@@ -87,6 +92,17 @@ export default {
                 this.$store.dispatch("Application/showLoader", false);
             });
 
+        },
+        async validateFields() {
+            this.$validator.errors.clear();
+            const validations = [];
+            this.$children.forEach((vm) => {
+                validations.push(vm.$validator.validateAll());
+            });
+
+            return Promise.all(validations).then(validationsResults => {
+                return !validationsResults.includes(false);
+            });
         }
     }
 }
