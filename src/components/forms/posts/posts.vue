@@ -48,17 +48,40 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col">
-                    <div class="form-group form-group-default">
-                        <label>
-                            Author Name
+                <div class="col-12 col-md">
+                    <div class="form-group-multiselect">
+                        <label :class="{'text-danger': errors.has('author') }">
+                            Author
+                            <span v-if="errors.has('author')">(required)</span>
                         </label>
-                        <input
-                            v-model.trim.lazy="postAuthorName"
-                            class="form-control"
-                            type="text"
-                            name="author"
-                        >
+                        <multiselect-wrapper
+                            v-validate="'required'"
+                            id="displayname"
+                            v-model="postAuthor"
+                            :endpoint="usersEndpoint"
+                            :multiselect-props="usersMultiselectProps"
+                            :class="{'border-danger': errors.has('author')}"
+                            data-vv-as="Author"
+                            data-vv-name="author"
+                        />
+                    </div>
+                </div>
+                <div class="col-12 col-md">
+                    <div class="form-group-multiselect">
+                        <label :class="{'text-danger': errors.has('collaborator') }">
+                            Collaborator
+                            <span v-if="errors.has('collaborator')">(required)</span>
+                        </label>
+                        <multiselect-wrapper
+                            v-validate="'required'"
+                            id="displayname"
+                            v-model="postCollaborator"
+                            :endpoint="usersEndpoint"
+                            :multiselect-props="{'label': 'displayname'}"
+                            :class="{'border-danger': errors.has('collaborator')}"
+                            data-vv-as="Collaborator"
+                            data-vv-name="collaborator"
+                        />
                     </div>
                 </div>
             </div>
@@ -304,7 +327,11 @@ export default {
                     allowedFileTypes: ["image/*"]
                 }
             },
-            fileSystemEndpoint: "filesystem"
+            fileSystemEndpoint: "filesystem",
+            usersEndpoint: "/users",
+            usersMultiselectProps: {
+                "label": "displayname"
+            }
         }
     },
     computed: {
@@ -382,12 +409,20 @@ export default {
                 this.$store.commit("Post/SET_POST_TAGS", tags);
             }
         },
-        postAuthorName: {
+        postAuthor: {
             get() {
                 return this.$store.state.Post.data.author_name;
             },
             set(author) {
                 this.$store.commit("Post/SET_POST_AUTHOR_NAME", author);
+            }
+        },
+        postCollaborator: {
+            get() {
+                return this.$store.state.Post.data.collaborator_id;
+            },
+            set(collaborator) {
+                this.$store.commit("Post/SET_POST_COLLABORATOR", collaborator);
             }
         },
         uppyXhrConfig() {
@@ -420,10 +455,12 @@ export default {
 
                 const clonedPost = cloneDeep(this.post);
                 clonedPost.category = clonedPost.category.id;
+
                 // TODO: This prop should not be needed but #teambackend flagged it as required.
                 clonedPost.category_id = clonedPost.category;
                 clonedPost.tags = clonedPost.tags.map(tag => tag.id);
                 clonedPost.post_types_id = clonedPost.type.id;
+                clonedPost.author_name = clonedPost.author_name.id;
 
                 axios({
                     url,

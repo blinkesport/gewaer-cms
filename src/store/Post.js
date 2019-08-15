@@ -37,7 +37,8 @@ const state = {
         "tags": [],
         "files": [],
         "is_live": "",
-        "author_name": ""
+        "author_name": null,
+        "collaborator_id": 0
     }
 }
 
@@ -89,6 +90,9 @@ const mutations = {
     },
     SET_POST_AUTHOR_NAME(state, authorName) {
         state.data.author_name = authorName;
+    },
+    SET_POST_COLLABORATOR(state, collaborator) {
+        state.data.collaborator_id = collaborator
     }
 }
 
@@ -146,7 +150,8 @@ const actions = {
             "tags": [],
             "files": [],
             "is_live": "",
-            "author_name": ""
+            "author_name": "",
+            "collaborator_id": 0
         }
         commit("SET_POST", data);
     },
