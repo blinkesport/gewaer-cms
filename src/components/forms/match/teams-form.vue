@@ -14,7 +14,7 @@
                     </label>
                     <multiselect-wrapper
                         v-validate="'required'"
-                        id="name"
+                        id="team_a"
                         v-model="matchTeamA"
                         :endpoint="teamsEndpoint"
                         :multiselect-props="teamsMultiselectCustomProps"
@@ -32,7 +32,7 @@
                     </label>
                     <multiselect-wrapper
                         v-validate="'required'"
-                        id="name"
+                        id="team_b"
                         v-model="matchTeamB"
                         :multiselect-props="teamsMultiselectCustomProps"
                         :endpoint="teamsEndpoint"

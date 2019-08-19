@@ -48,17 +48,64 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col">
-                    <div class="form-group form-group-default">
-                        <label>
-                            Author Name
+                <div class="col-12 col-md">
+                    <div class="form-group-multiselect">
+                        <label :class="{'text-danger': errors.has('author') }">
+                            Author
+                            <span v-if="errors.has('author')">(required)</span>
                         </label>
-                        <input
-                            v-model.trim.lazy="postAuthorName"
-                            class="form-control"
-                            type="text"
-                            name="author"
+                        <multiselect-wrapper
+                            v-validate="'required'"
+                            v-model="postAuthor"
+                            :endpoint="usersEndpoint"
+                            :multiselect-props="usersMultiselectProps"
+                            :class="{'border-danger': errors.has('author')}"
+                            field="firstname"
+                            data-vv-as="Author"
+                            data-vv-name="author"
                         >
+                            <template slot="singleLabel">
+                                {{ postAuthor.firstname }} {{ postAuthor.lastname }}
+                            </template>
+                            <template
+                                slot="option"
+                                slot-scope="scopedProps"
+                            >
+                                <div class="option__desc">
+                                    <span class="option__title">{{ scopedProps.props.option.firstname }} {{ scopedProps.props.option.lastname }}</span>
+                                </div>
+                            </template>
+                        </multiselect-wrapper>
+                    </div>
+                </div>
+                <div class="col-12 col-md">
+                    <div class="form-group-multiselect">
+                        <label :class="{'text-danger': errors.has('collaborator') }">
+                            Collaborator
+                            <span v-if="errors.has('collaborator')">(required)</span>
+                        </label>
+                        <multiselect-wrapper
+                            v-validate="'required'"
+                            v-model="postCollaborator"
+                            :endpoint="usersEndpoint"
+                            :multiselect-props="usersMultiselectProps"
+                            :class="{'border-danger': errors.has('collaborator')}"
+                            field="firstname"
+                            data-vv-as="Collaborator"
+                            data-vv-name="collaborator"
+                        >
+                            <template slot="singleLabel">
+                                {{ postCollaborator.firstname }} {{ postCollaborator.lastname }}
+                            </template>
+                            <template
+                                slot="option"
+                                slot-scope="props"
+                            >
+                                <div class="option__desc">
+                                    <span class="option__title">{{ props.props.option.firstname }} {{ props.props.option.lastname }}</span>
+                                </div>
+                            </template>
+                        </multiselect-wrapper>
                     </div>
                 </div>
             </div>
@@ -130,11 +177,11 @@
                         </label>
                         <multiselect-wrapper
                             v-validate="'required'"
-                            id="title"
                             v-model="postCategory"
                             :endpoint="categoryEndpoint"
                             :multiselect-props="categoryMultiselectProps"
                             :class="{'border-danger': errors.has('category')}"
+                            field="title"
                             data-vv-as="Category"
                             data-vv-name="category"
                         >
@@ -154,11 +201,11 @@
                         </label>
                         <multiselect-wrapper
                             v-validate="'required'"
-                            id="title"
                             v-model.lazy="postType"
                             :endpoint="postTypeEndpoint"
                             :multiselect-props="postTypeMultiselectProps"
                             :class="{'border-danger': errors.has('type')}"
+                            field="title"
                             data-vv-as="Type"
                             data-vv-name="type"
                         >
@@ -177,11 +224,11 @@
                         </label>
                         <multiselect-wrapper
                             v-validate="'required'"
-                            id="title"
                             v-model.lazy="postTags"
                             :endpoint="postTagsEndpoint"
                             :multiselect-props="postTagsMultiselectProps"
                             :class="{'border-danger': errors.has('tags')}"
+                            field="title"
                             data-vv-as="Tags"
                             data-vv-name="tags"
                         >
@@ -304,7 +351,11 @@ export default {
                     allowedFileTypes: ["image/*"]
                 }
             },
-            fileSystemEndpoint: "filesystem"
+            fileSystemEndpoint: "filesystem",
+            usersEndpoint: "/users",
+            usersMultiselectProps: {
+                "label": "firstname"
+            }
         }
     },
     computed: {
@@ -382,12 +433,20 @@ export default {
                 this.$store.commit("Post/SET_POST_TAGS", tags);
             }
         },
-        postAuthorName: {
+        postAuthor: {
             get() {
-                return this.$store.state.Post.data.author_name;
+                return this.$store.state.Post.data.author;
             },
             set(author) {
                 this.$store.commit("Post/SET_POST_AUTHOR_NAME", author);
+            }
+        },
+        postCollaborator: {
+            get() {
+                return this.$store.state.Post.data.collaborator;
+            },
+            set(collaborator) {
+                this.$store.commit("Post/SET_POST_COLLABORATOR", collaborator);
             }
         },
         uppyXhrConfig() {
@@ -420,10 +479,13 @@ export default {
 
                 const clonedPost = cloneDeep(this.post);
                 clonedPost.category = clonedPost.category.id;
+
                 // TODO: This prop should not be needed but #teambackend flagged it as required.
                 clonedPost.category_id = clonedPost.category;
                 clonedPost.tags = clonedPost.tags.map(tag => tag.id);
                 clonedPost.post_types_id = clonedPost.type.id;
+                clonedPost.collaborator_id = clonedPost.collaborator.id;
+                clonedPost.author_id = clonedPost.author.id;
 
                 axios({
                     url,
