@@ -56,7 +56,7 @@
                         </label>
                         <multiselect-wrapper
                             v-validate="'required'"
-                            id="displayname"
+                            id="firstname"
                             v-model="postAuthor"
                             :endpoint="usersEndpoint"
                             :multiselect-props="usersMultiselectProps"
@@ -74,7 +74,7 @@
                         </label>
                         <multiselect-wrapper
                             v-validate="'required'"
-                            id="displayname"
+                            id="firstname"
                             v-model="postCollaborator"
                             :endpoint="usersEndpoint"
                             :multiselect-props="{'label': 'displayname'}"
@@ -330,7 +330,7 @@ export default {
             fileSystemEndpoint: "filesystem",
             usersEndpoint: "/users",
             usersMultiselectProps: {
-                "label": "displayname"
+                "label": "firstname"
             }
         }
     },
@@ -411,7 +411,7 @@ export default {
         },
         postAuthor: {
             get() {
-                return this.$store.state.Post.data.author_name;
+                return this.$store.state.Post.data.user;
             },
             set(author) {
                 this.$store.commit("Post/SET_POST_AUTHOR_NAME", author);
@@ -461,6 +461,7 @@ export default {
                 clonedPost.tags = clonedPost.tags.map(tag => tag.id);
                 clonedPost.post_types_id = clonedPost.type.id;
                 clonedPost.author_name = clonedPost.author_name.id;
+                clonedPost.user = clonedPost.user.id;
 
                 axios({
                     url,
