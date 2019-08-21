@@ -3,11 +3,12 @@ import store from "@/store";
 import { isValidJWT } from "@/utils/helpers";
 
 const validateSubscription = function validateSubscription(routeTo) {
-    let routeToGo = routeTo;
-    if (routeTo.name != "settingsCompaniesSubscriptions" && store.getters["Company/subscriptionHasEnded"]) {
-        routeToGo = { name: "settingsCompaniesSubscriptions" }
-    }
-    return routeToGo;
+    // TODO: Commented this until free trial is fixed.
+    // const routeToGo = routeTo;
+    // if (routeTo.name != "settingsCompaniesSubscriptions" && store.getters["Company/subscriptionHasEnded"]) {
+    //     routeToGo = { name: "settingsCompaniesSubscriptions" }
+    // }
+    return routeTo;
 };
 
 const validationHandler = function validationHandler(routeTo) {
