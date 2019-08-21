@@ -3,10 +3,10 @@ import store from "@/store";
 import { isValidJWT } from "@/utils/helpers";
 
 const validateSubscription = function validateSubscription(routeTo) {
-    let routeToGo = routeTo;
-    if (routeTo.name != "settingsCompaniesSubscriptions" && store.getters["Company/subscriptionHasEnded"]) {
-        routeToGo = { name: "settingsCompaniesSubscriptions" }
-    }
+    const routeToGo = routeTo;
+    // if (routeTo.name != "settingsCompaniesSubscriptions" && store.getters["Company/subscriptionHasEnded"]) {
+    //     routeToGo = { name: "settingsCompaniesSubscriptions" }
+    // }
     return routeToGo;
 };
 
