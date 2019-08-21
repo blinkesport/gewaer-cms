@@ -64,14 +64,14 @@
                             data-vv-as="Author"
                             data-vv-name="author"
                         >
-                            <template slot="singleLabel">
+                            <template v-if="!isEmpty(postAuthor)" slot="singleLabel">
                                 {{ postAuthor.firstname }} {{ postAuthor.lastname }}
                             </template>
                             <template
                                 slot="option"
                                 slot-scope="scopedProps"
                             >
-                                <div class="option__desc">
+                                <div v-if="!isEmpty(scopedProps)" class="option__desc">
                                     <span class="option__title">{{ scopedProps.props.option.firstname }} {{ scopedProps.props.option.lastname }}</span>
                                 </div>
                             </template>
@@ -94,14 +94,15 @@
                             data-vv-as="Collaborator"
                             data-vv-name="collaborator"
                         >
-                            <template slot="singleLabel">
+                            <template v-if="!isEmpty(postCollaborator)" slot="singleLabel">
                                 {{ postCollaborator.firstname }} {{ postCollaborator.lastname }}
                             </template>
                             <template
+
                                 slot="option"
                                 slot-scope="props"
                             >
-                                <div class="option__desc">
+                                <div v-if="!isEmpty(props)" class="option__desc">
                                     <span class="option__title">{{ props.props.option.firstname }} {{ props.props.option.lastname }}</span>
                                 </div>
                             </template>
@@ -314,6 +315,7 @@
 import { mapState } from "vuex";
 import validationMixins from "@/mixins/validationMixins";
 import cloneDeep from "lodash/cloneDeep";
+import _isEmpty from "lodash/isEmpty";
 
 export default {
     components: {
@@ -528,7 +530,8 @@ export default {
                 text: error,
                 type: "error"
             });
-        }
+        },
+        isEmpty: _isEmpty
     }
 }
 </script>
