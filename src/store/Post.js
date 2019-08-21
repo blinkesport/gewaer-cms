@@ -37,7 +37,7 @@ const state = {
         "tags": [],
         "files": [],
         "is_live": "",
-        "author_name": null,
+        "author": null,
         "collaborator": null,
         "user": ""
     }
@@ -151,7 +151,7 @@ const actions = {
             "tags": [],
             "files": [],
             "is_live": "",
-            "author_name": "",
+            "author": "",
             "collaborator": 0,
             "user": ""
         }
