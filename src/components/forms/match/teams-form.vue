@@ -6,7 +6,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-12">
+            <div class="col-lg-4 col-md-4 col-sm-12">
                 <div class="form-group-multiselect">
                     <label :class="{'text-danger': errors.has('team-a') }">
                         Team A
@@ -14,17 +14,17 @@
                     </label>
                     <multiselect-wrapper
                         v-validate="'required'"
-                        id="team_a"
                         v-model="matchTeamA"
                         :endpoint="teamsEndpoint"
                         :multiselect-props="teamsMultiselectCustomProps"
                         :class="{'border-danger': errors.has('team-a')}"
+                        field="team_a"
                         data-vv-as="Team A"
                         name="team-a"
                     />
                 </div>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-12">
+            <div class="col-lg-4 col-md-4 col-sm-12">
                 <div class="form-group-multiselect">
                     <label :class="{'text-danger': errors.has('team-b') }">
                         Team B
@@ -32,13 +32,31 @@
                     </label>
                     <multiselect-wrapper
                         v-validate="'required'"
-                        id="team_b"
                         v-model="matchTeamB"
                         :multiselect-props="teamsMultiselectCustomProps"
                         :endpoint="teamsEndpoint"
                         :class="{'border-danger': errors.has('team-b')}"
+                        field="team_b"
                         data-vv-as="Team B"
                         name="team-b"
+                    />
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="form-group-multiselect">
+                    <label :class="{'text-danger': errors.has('winning-team') }">
+                        Winning Team
+                        <span v-if="errors.has('winning-team')">(required)</span>
+                    </label>
+                    <multiselect-wrapper
+                        v-validate="'required'"
+                        v-model="winningTeam"
+                        :multiselect-props="teamsMultiselectCustomProps"
+                        :endpoint="teamsEndpoint"
+                        :class="{'border-danger': errors.has('winning-team')}"
+                        field="winning_team"
+                        data-vv-as="Winning Team"
+                        name="winning-team"
                     />
                 </div>
             </div>
@@ -75,6 +93,14 @@ export default {
             },
             set(teamB) {
                 this.$store.commit("Match/SET_TEAM_B", teamB);
+            }
+        },
+        winningTeam: {
+            get() {
+                return this.$store.state.Match.data.winning_team;
+            },
+            set(team) {
+                this.$store.commit("Match/SET_WINNING_TEAM", team);
             }
         }
     }
