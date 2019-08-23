@@ -44,16 +44,13 @@
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12">
                 <div class="form-group-multiselect">
-                    <label :class="{'text-danger': errors.has('winning-team') }">
+                    <label>
                         Winning Team
-                        <span v-if="errors.has('winning-team')">(required)</span>
                     </label>
                     <multiselect-wrapper
-                        v-validate="'required'"
                         v-model="winningTeam"
                         :multiselect-props="teamsMultiselectCustomProps"
                         :endpoint="teamsEndpoint"
-                        :class="{'border-danger': errors.has('winning-team')}"
                         field="winning_team"
                         data-vv-as="Winning Team"
                         name="winning-team"
