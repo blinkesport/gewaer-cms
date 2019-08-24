@@ -2,10 +2,11 @@ const state = {
     data: {
         team_a: "",
         team_b: "",
-        start_time: "",
-        end_time: "",
-        third_party_id: 0,
-        games_id: "1"
+        start_time: null,
+        end_time: null,
+        third_party_id: null,
+        games_id: "1",
+        winning_team: null
     }
 }
 
@@ -30,6 +31,9 @@ const mutations = {
     },
     SET_THIRD_PARTY_ID(state, id) {
         state.data.third_party_id = id;
+    },
+    SET_WINNING_TEAM(state, team) {
+        state.data.winning_team = team;
     }
 }
 
@@ -55,7 +59,8 @@ const actions = {
             start_time: "",
             end_time: "",
             third_party_id: 0,
-            games_id: "1"
+            games_id: "1",
+            winning_team: null
         }
         commit("SET_DATA", data);
     }

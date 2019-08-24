@@ -1,5 +1,5 @@
 const webpack = require("webpack");
-//const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");
+const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");
 
 
 module.exports = {
@@ -14,7 +14,9 @@ module.exports = {
     configureWebpack: {
         plugins: [
             new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
-            //new LodashModuleReplacementPlugin
+            new LodashModuleReplacementPlugin({
+                path: true
+            })
         ],
         resolve: {
             alias: {

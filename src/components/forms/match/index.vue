@@ -57,7 +57,12 @@ export default {
         this.$store.dispatch("Match/cleanData");
     },
     methods: {
-        submitForm() {
+        async submitForm() {
+            const isFormValid = await this.validateFields();
+            if (!isFormValid) {
+                return;
+            }
+
             this.$store.commit("Application/SET_IS_LOADING", true);
             const method = this.isEditing ? "PUT" : "POST";
             const url = this.isEditing ? `/tournaments-matches/${this.$route.params.id}` : `/tournaments-matches`;
@@ -65,6 +70,7 @@ export default {
             const clonedMatch = cloneDeep(this.match);
             clonedMatch.team_a = this.match.team_a.id;
             clonedMatch.team_b = this.match.team_b.id;
+            clonedMatch.winning_team = this.match.winning_team.id;
 
             this.$store.dispatch("Application/showLoader", true);
             axios({
@@ -73,7 +79,7 @@ export default {
                 data: clonedMatch
             }).then(() => {
                 this.$notify({
-                    text: "Post saved successfully",
+                    text: "Match saved successfully",
                     type: "success"
                 });
                 this.$router.push({ name: "browse", params: { resource: "tournaments-matches" } });
@@ -87,6 +93,17 @@ export default {
                 this.$store.dispatch("Application/showLoader", false);
             });
 
+        },
+        async validateFields() {
+            this.$validator.errors.clear();
+            const validations = [];
+            this.$children.forEach((vm) => {
+                validations.push(vm.$validator.validateAll());
+            });
+
+            return Promise.all(validations).then(validationsResults => {
+                return !validationsResults.includes(false);
+            });
         }
     }
 }

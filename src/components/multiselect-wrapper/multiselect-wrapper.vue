@@ -14,9 +14,13 @@
     >
         <slot slot="beforeList" name="beforeList" />
         <slot slot="afterList" name="afterList" />
-        <template slot="option" slot-scope="props">
-            <div class="option__desc"><span class="option__title">{{ props.option[id] }}</span></div>
-        </template>
+        <slot slot="singleLabel" name="singleLabel" />
+        <slot
+            slot="option"
+            slot-scope="props"
+            :props="props"
+            name="option"
+        />
     </multiselect>
 </template>
 
@@ -29,7 +33,7 @@ export default {
             type: Object | Array | String | Number,
             required: true
         },
-        id: {
+        field: {
             type: String,
             required: true
         },
@@ -91,7 +95,7 @@ export default {
 
             this.isLoading = true;
             return axios({
-                url: encodeURI(`${this.endpoint}?q=(${this.id}:%${searchQuery}%)&limit=${this.optionsLimit}`),
+                url: encodeURI(`${this.endpoint}?q=(${this.field}:%${searchQuery}%)&limit=${this.optionsLimit}`),
                 method: "GET"
             }).then(response => {
                 this.list = response.data.sort(this.orderComparison);

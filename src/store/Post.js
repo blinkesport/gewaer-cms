@@ -37,7 +37,9 @@ const state = {
         "tags": [],
         "files": [],
         "is_live": "",
-        "author_name": ""
+        "author": null,
+        "collaborator": null,
+        "user": ""
     }
 }
 
@@ -88,7 +90,10 @@ const mutations = {
         state.data.is_live = liveStatus;
     },
     SET_POST_AUTHOR_NAME(state, authorName) {
-        state.data.author_name = authorName;
+        state.data.author = authorName;
+    },
+    SET_POST_COLLABORATOR(state, collaborator) {
+        state.data.collaborator = collaborator
     }
 }
 
@@ -146,7 +151,9 @@ const actions = {
             "tags": [],
             "files": [],
             "is_live": "",
-            "author_name": ""
+            "author": "",
+            "collaborator": 0,
+            "user": ""
         }
         commit("SET_POST", data);
     },
