@@ -70,6 +70,7 @@ export default {
             const clonedMatch = cloneDeep(this.match);
             clonedMatch.team_a = this.match.team_a.id;
             clonedMatch.team_b = this.match.team_b.id;
+            clonedMatch.winning_team = this.match.winning_team.id;
 
             this.$store.dispatch("Application/showLoader", true);
             axios({
@@ -78,7 +79,7 @@ export default {
                 data: clonedMatch
             }).then(() => {
                 this.$notify({
-                    text: "Post saved successfully",
+                    text: "Match saved successfully",
                     type: "success"
                 });
                 this.$router.push({ name: "browse", params: { resource: "tournaments-matches" } });
