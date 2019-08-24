@@ -18,7 +18,7 @@
                         :endpoint="teamsEndpoint"
                         :multiselect-props="teamsMultiselectCustomProps"
                         :class="{'border-danger': errors.has('team-a')}"
-                        field="team_a"
+                        field="name"
                         data-vv-as="Team A"
                         name="team-a"
                     />
@@ -36,7 +36,7 @@
                         :multiselect-props="teamsMultiselectCustomProps"
                         :endpoint="teamsEndpoint"
                         :class="{'border-danger': errors.has('team-b')}"
-                        field="team_b"
+                        field="name"
                         data-vv-as="Team B"
                         name="team-b"
                     />
@@ -51,7 +51,7 @@
                         v-model="winningTeam"
                         :multiselect-props="teamsMultiselectCustomProps"
                         :endpoint="teamsEndpoint"
-                        field="winning_team"
+                        field="name"
                         data-vv-as="Winning Team"
                         name="winning-team"
                     />
