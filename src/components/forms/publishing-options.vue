@@ -68,7 +68,7 @@
 <script>
 
 import moment from "moment";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import { dateFormats } from "@/utils/helpers";
 
 export default {
@@ -93,8 +93,10 @@ export default {
     computed: {
         ...mapState({
             postStatusList: state => state.PostStatus.data,
-            postStatusIdList: state => state.PostStatus.statusIds,
             userTimezone: state => state.User.data.timezone
+        }),
+        ...mapGetters({
+            postStatusIds: "PostStatus/statusIds"
         }),
         isScheduled() {
             return this.$store.getters["Post/isScheduled"];
@@ -133,9 +135,9 @@ export default {
                 });
             },
             set(status) {
-                if (status.id == this.postStatusList.DRAFT) {
-                    this.$store.commit(`${this.storeName}/SET_PUBLISHED_AT`, null);
-                } else if (status.id == this.postStatusList.SCHEDULED) {
+                if (status.id == this.postStatusIds.DRAFT) {
+                    this.$store.dispatch(`${this.storeName}/resetPublishedDate`);
+                } else if (status.id == this.postStatusIds.SCHEDULED) {
                     const publishedAt = moment.utc().format(dateFormats.dateTimeStamp);
                     this.$store.commit(`${this.storeName}/SET_PUBLISHED_AT`, publishedAt);
                 }
