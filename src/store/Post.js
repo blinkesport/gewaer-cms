@@ -40,7 +40,8 @@ const state = {
         "author": null,
         "collaborator": null,
         "user": ""
-    }
+    },
+    published_at_backup: null
 }
 
 const mutations = {
@@ -94,6 +95,9 @@ const mutations = {
     },
     SET_POST_COLLABORATOR(state, collaborator) {
         state.data.collaborator = collaborator
+    },
+    SET_PUBLISHED_AT_BACKUP(state, date) {
+        state.published_at_backup = date;
     }
 }
 
@@ -102,6 +106,8 @@ const actions = {
         if (postId) {
             dispatch("Application/showLoader", true, { root: true });
             dispatch("getData", postId).then(({ data: post }) => {
+                commit("SET_PUBLISHED_AT_BACKUP", post.published_at);
+
                 commit("SET_POST", post);
                 dispatch("Application/showLoader", false, { root: true });
             });
@@ -155,6 +161,7 @@ const actions = {
             "collaborator": 0,
             "user": ""
         }
+        commit("SET_PUBLISHED_AT_BACKUP", null);
         commit("SET_POST", data);
     },
     addFiles({ commit, state }, files) {
@@ -177,6 +184,10 @@ const actions = {
         const clonedFiles = cloneDeep(state.data.files);
         clonedFiles.splice(index, 1);
         commit("SET_FILES", clonedFiles);
+    },
+    resetPublishedDate({ commit, state }) {
+        const publishedDate = state.published_at_backup ? state.published_at_backup : null;
+        commit("SET_PUBLISHED_AT", publishedDate);
     }
 }
 
