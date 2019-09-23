@@ -482,7 +482,6 @@ export default {
                 const clonedPost = cloneDeep(this.post);
                 clonedPost.category = clonedPost.category.id;
 
-                // TODO: This prop should not be needed but #teambackend flagged it as required.
                 clonedPost.category_id = clonedPost.category;
                 clonedPost.tags = clonedPost.tags.map(tag => tag.id);
                 clonedPost.post_types_id = clonedPost.type.id;
