@@ -35,7 +35,7 @@
                         v-validate="'required'"
                         v-model.trim.lazy="podcastUrl"
                         type="url"
-                        placeholder="https://www.mordor.com"
+                        placeholder="https://example.com"
                         pattern="https?://.*"
                         size="30"
                         class="form-control"
