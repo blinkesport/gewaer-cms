@@ -39,7 +39,8 @@ const state = {
         "is_live": "",
         "author": null,
         "collaborator": null,
-        "user": ""
+        "user": "",
+        game: null
     },
     published_at_backup: null
 }
@@ -98,6 +99,9 @@ const mutations = {
     },
     SET_PUBLISHED_AT_BACKUP(state, date) {
         state.published_at_backup = date;
+    },
+    SET_POST_GAME(state, game) {
+        state.data.game = game;
     }
 }
 
@@ -159,7 +163,8 @@ const actions = {
             "is_live": "",
             "author": "",
             "collaborator": 0,
-            "user": ""
+            "user": "",
+            game: null
         }
         commit("SET_PUBLISHED_AT_BACKUP", null);
         commit("SET_POST", data);
