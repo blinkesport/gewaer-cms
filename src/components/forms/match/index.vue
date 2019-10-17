@@ -3,7 +3,7 @@
         <form class="resource-form" @submit.prevent="submitForm()">
             <general-info-form />
             <transition name="fade">
-                <teams-form v-if="!isMatchesDisabled" />
+                <teams-form v-if="match.game !== null" />
             </transition>
             <dates-form />
 
