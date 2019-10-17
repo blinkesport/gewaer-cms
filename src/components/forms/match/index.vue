@@ -2,7 +2,9 @@
     <div>
         <form class="resource-form" @submit.prevent="submitForm()">
             <general-info-form />
-            <teams-form />
+            <transition name="fade">
+                <teams-form v-if="!isMatchesDisabled" />
+            </transition>
             <dates-form />
 
             <div class="row float-right">
@@ -44,10 +46,14 @@ export default {
     computed: {
         ...mapState({
             isLoading: state => state.Application.isLoading,
-            match: state => state.Match.data
+            match: state => state.Match.data,
+            matchGame: state => state.Match.data.game
         }),
         isEditing() {
             return Boolean(this.$route.params.id);
+        },
+        isMatchesDisabled() {
+            return this.matchGame === null;
         }
     },
     created() {
@@ -108,3 +114,11 @@ export default {
     }
 }
 </script>
+<style>
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+}
+</style>

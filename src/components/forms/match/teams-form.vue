@@ -18,6 +18,7 @@
                         :endpoint="teamsEndpoint"
                         :multiselect-props="teamsMultiselectCustomProps"
                         :class="{'border-danger': errors.has('team-a')}"
+                        title="Select match team A"
                         field="name"
                         data-vv-as="Team A"
                         name="team-a"
@@ -36,6 +37,7 @@
                         :multiselect-props="teamsMultiselectCustomProps"
                         :endpoint="teamsEndpoint"
                         :class="{'border-danger': errors.has('team-b')}"
+                        title="Select match team B"
                         field="name"
                         data-vv-as="Team B"
                         name="team-b"
@@ -51,7 +53,10 @@
                         v-model="winningTeam"
                         :multiselect-props="teamsMultiselectCustomProps"
                         :endpoint="teamsEndpoint"
+                        title="Select match winner team"
                         field="name"
+                        search-field="sda"
+                        filter-fields="ad"
                         data-vv-as="Winning Team"
                         name="winning-team"
                     />
@@ -61,6 +66,7 @@
     </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
     name: "TeamsForm",
     components: {
@@ -76,6 +82,9 @@ export default {
         }
     },
     computed: {
+        ...mapState({
+            matchGame: state => state.Match.data.game
+        }),
         matchTeamA: {
             get() {
                 return this.$store.state.Match.data.team_a;
