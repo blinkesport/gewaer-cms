@@ -55,7 +55,6 @@
                         :endpoint="teamsEndpoint"
                         title="Select match winner team"
                         field="name"
-                        search-field="sda"
                         data-vv-as="Winning Team"
                         name="winning-team"
                     />
