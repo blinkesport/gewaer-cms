@@ -46,14 +46,10 @@ export default {
     computed: {
         ...mapState({
             isLoading: state => state.Application.isLoading,
-            match: state => state.Match.data,
-            matchGame: state => state.Match.data.game
+            match: state => state.Match.data
         }),
         isEditing() {
             return Boolean(this.$route.params.id);
-        },
-        isMatchesDisabled() {
-            return this.matchGame === null;
         }
     },
     created() {

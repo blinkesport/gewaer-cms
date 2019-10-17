@@ -64,7 +64,7 @@
     </div>
 </template>
 <script>
-import { mapState } from "vuex";
+
 export default {
     name: "TeamsForm",
     components: {
@@ -80,9 +80,6 @@ export default {
         }
     },
     computed: {
-        ...mapState({
-            matchGame: state => state.Match.data.game
-        }),
         matchTeamA: {
             get() {
                 return this.$store.state.Match.data.team_a;
