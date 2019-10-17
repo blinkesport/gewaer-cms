@@ -56,7 +56,6 @@
                         title="Select match winner team"
                         field="name"
                         search-field="sda"
-                        filter-fields="ad"
                         data-vv-as="Winning Team"
                         name="winning-team"
                     />
