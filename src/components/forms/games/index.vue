@@ -15,7 +15,7 @@
                         </label>
                         <input
                             v-validate="'required'"
-                            v-model.trim="game.title"
+                            v-model.trim="gameTitle"
                             class="form-control"
                             type="text"
                             name="title"
@@ -49,7 +49,7 @@
                         </label>
                         <input
                             v-validate="'required'"
-                            v-model.trim="game.slug"
+                            v-model.trim="gameSlug"
                             class="form-control"
                             type="text"
                             name="slug"
@@ -163,6 +163,7 @@ import moment from "moment";
 import "moment-timezone";
 import { mapState } from "vuex";
 import { dateFormats } from "@/utils/helpers";
+const slugify = require("@sindresorhus/slugify");
 
 export default {
     name: "GamesForm",
@@ -185,6 +186,15 @@ export default {
         ...mapState({
             timezone: state => state.User.data.timezone
         }),
+        gameTitle: {
+            get() {
+                return this.game.title;
+            },
+            set(title) {
+                this.game.slug = slugify(title);
+                this.game.title = title;
+            }
+        },
         releaseDate: {
             get() {
                 const releaseDate = this.game.release_date;
@@ -196,6 +206,14 @@ export default {
             set(date) {
                 const releaseDate = date ? moment.utc(date).format(dateFormats.dateTimeStamp) : null;
                 this.game.release_date = releaseDate;
+            }
+        },
+        gameSlug: {
+            get() {
+                return this.game.slug;
+            },
+            set(value) {
+                this.game.slug = slugify(value);
             }
         }
     },
