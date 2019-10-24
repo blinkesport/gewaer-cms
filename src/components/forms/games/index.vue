@@ -45,7 +45,7 @@
                     <div :class="{ 'border-danger': errors.has('slug') }" class="form-group form-group-default">
                         <label :class="{'text-danger': errors.has('slug') }">
                             Slug
-                            <span v-if="errors.has('slug')"> (required) </span>
+                            <span v-if="errors.has('slug')">({{ errors.first('slug') }})</span>
                         </label>
                         <input
                             v-validate="'required'"
