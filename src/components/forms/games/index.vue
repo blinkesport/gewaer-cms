@@ -121,7 +121,7 @@
                             v-validate="'required'"
                             v-model.trim.lazy="game.icon"
                             type="url"
-                            placeholder="https://www.mordor.com"
+                            placeholder="https://www.example.com"
                             pattern="https?://.*"
                             size="30"
                             class="form-control"
