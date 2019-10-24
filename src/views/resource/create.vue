@@ -17,7 +17,8 @@ export default {
     components: {
         posts: () => import(/* webpackChunkName: "posts" */ "@c/forms/posts/posts"),
         tournamentsMatches: () => import(/* webpackChunkName: "tournaments-matches" */ "@c/forms/match/"),
-        rss: () => import(/* webpackChunkName: "rss" */ "@c/forms/rss/")
+        rss: () => import(/* webpackChunkName: "rss" */ "@c/forms/rss/"),
+        games: () => import(/* webpackChunkName: "games" */ "@c/forms/games/")
     },
     data() {
         return {
