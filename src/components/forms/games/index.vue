@@ -255,7 +255,9 @@ export default {
             }
 
             this.$store.commit("Application/SHOW_LOADER", true);
-            axios({ url: `/games/${this.$route.params.id}` }).then(({ data: game }) => {
+            axios({
+            	url: `/games/${this.$route.params.id}`
+            }).then(({ data: game }) => {
                 this.game = game;
             }).catch(error => {
                 this.$notify({
