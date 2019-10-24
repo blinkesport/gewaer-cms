@@ -101,7 +101,7 @@
                             v-validate="'required'"
                             v-model.trim.lazy="game.logo"
                             type="url"
-                            placeholder="https://www.mordor.com"
+                            placeholder="https://www.example.com"
                             pattern="https?://.*"
                             size="30"
                             class="form-control"
@@ -256,7 +256,7 @@ export default {
 
             this.$store.commit("Application/SHOW_LOADER", true);
             axios({
-            	url: `/games/${this.$route.params.id}`
+                url: `/games/${this.$route.params.id}`
             }).then(({ data: game }) => {
                 this.game = game;
             }).catch(error => {
