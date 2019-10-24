@@ -115,7 +115,7 @@
                     <div :class="{ 'border-danger': errors.has('icon-url') }" class="form-group form-group-default">
                         <label :class="{'text-danger': errors.has('icon-url') }">
                             Icon Url
-                            <span v-if="errors.has('icon-url')"> ({{ errors.first('icon-url') }})</span>
+                            <span v-if="errors.has('icon-url')">({{ errors.first('icon-url') }})</span>
                         </label>
                         <input
                             v-validate="'required'"
