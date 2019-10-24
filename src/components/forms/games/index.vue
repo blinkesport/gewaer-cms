@@ -61,7 +61,7 @@
                 <div class="col-6">
                     <label :class="{ 'text-danger': errors.has('game-release-date') }" class="mb-0 mr-2">
                         Release Date
-                        <span v-if="errors.has('game-release-date')">(required)</span>
+                        <span v-if="errors.has('game-release-date')">({{ errors.first('game-release-date') }})</span>
                     </label>
                     <div class="form-group-multiselect">
                         <el-date-picker
