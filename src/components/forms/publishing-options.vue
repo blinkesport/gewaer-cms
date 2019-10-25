@@ -120,10 +120,10 @@ export default {
         publishedAt: {
             get() {
                 const publishedAt = this.$store.state[this.storeName].data.published_at;
-                return moment.utc(publishedAt).format(dateFormats.dateTimeStamp);
+                return moment.utc(publishedAt).format(dateFormats.dateTimeTimeStamp);
             },
             set(isPublished) {
-                const publishedAt = moment.utc(isPublished).format(dateFormats.dateTimeStamp);
+                const publishedAt = moment.utc(isPublished).format(dateFormats.dateTimeTimeStamp);
                 this.$store.commit(`${this.storeName}/SET_PUBLISHED_AT`, publishedAt);
             }
         },
@@ -138,7 +138,7 @@ export default {
                 if (status.id == this.postStatusIds.DRAFT) {
                     this.$store.dispatch(`${this.storeName}/resetPublishedDate`);
                 } else if (status.id == this.postStatusIds.SCHEDULED) {
-                    const publishedAt = moment.utc().format(dateFormats.dateTimeStamp);
+                    const publishedAt = moment.utc().format(dateFormats.dateTimeTimeStamp);
                     this.$store.commit(`${this.storeName}/SET_PUBLISHED_AT`, publishedAt);
                 }
                 this.$store.commit(`${this.storeName}/SET_PUBLISHED_STATUS`, status.id);
