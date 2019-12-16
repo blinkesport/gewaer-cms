@@ -138,6 +138,7 @@
                             v-validate="'required'"
                             :class="{ 'border-danger': errors.has('summary') }"
                             v-model="postSummary"
+                            :configuration="quillConfiguration"
                             data-vv-name="summary"
                             name="summary"
                             data-vv-as="Body"
@@ -156,6 +157,7 @@
                             v-validate="'required'"
                             :class="{ 'border-danger': errors.has('content') }"
                             v-model="postContent"
+                            :configuration="quillConfiguration"
                             class="post-content"
                             data-vv-name="content"
                             name="content"
@@ -381,6 +383,35 @@ export default {
                 multiselectProps: {
                     "label": "name"
                 }
+            },
+            quillConfiguration: {
+                modules: {
+                    toolbar: {          
+                        container: ["image", [{ align: [] }]],
+                        handlers: {
+                            "image": function() {
+                                const input = document.createElement("input")
+                                input.setAttribute("type", "file");
+                                input.setAttribute("accept", "image/*");
+                                input.click();
+                                input.onchange = async function onchange() {
+                                    const file = input.files[0];
+                                    const range = this.quill.getSelection();
+
+                                    const formData = new FormData();
+                                    formData.append("files", file);
+                                    formData.append("name", file.name);
+                                    formData.append("type", file.type);
+                                    const { data: files } = await axios.post("/filesystem", formData);
+                                    const imageUrl = files[0].url;
+
+                                    this.quill.insertEmbed(range.index, "image", imageUrl);
+                                }.bind(this)
+                            }
+                        }
+                    }
+                },
+                theme: "snow"
             },
             uppyConfig: {
                 debug: process.env.NODE_ENV !== "production",
