@@ -35,59 +35,8 @@ export default {
     },
     data() {
         return {
-            defaultToolbarConfigurations: [
-                // ["image"],
-                // [{ "header": 1 }, { "header": 2 }],
-                // [{ list: "ordered" }, { list: "bullet" }],
-                // [{ "script": "sub" }, { "script": "super" }],
-                // [{ indent: "-1" }, { indent: "+1" }],
-                // [{ "direction": "rtl" }], // text direction
-                // [{ size: ["small", false, "large", "huge"] }],
-                // [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                // [{ color: [] }, { background: [] }],
-                // [{ font: [] }],
-                // [{ align: [] }],
-                // [
-                //     {
-                //         lineheight: [
-                //             "1.0",
-                //             "1.5",
-                //             "2.0",
-                //             "2.5",
-                //             "3.0"
-                //         ]
-                //     }
-                // ],
-                // [
-                //     {
-                //         image: function() {
-                //             // let fileInput = this.container.querySelector("input.ql-image[type=file]");
-                //             // console.log(fileInput);
-                //             // if (fileInput == null) {
-                //             //     fileInput = document.createElement("input");
-                //             //     fileInput.setAttribute("type", "file");
-                //             //     fileInput.setAttribute(
-                //             //         "accept",
-                //             //         "image/png"
-                //             //     );
-                //             //     fileInput.classList.add("ql-image");
-                //             //     fileInput.addEventListener("change", () => {
-                //             //         if (fileInput.files != null && fileInput.files[0] != null) {
-                //             //             // Do your own stuff here
-                //             //             alert("test");
-                //             //             debugger;
-                //             //         }
-                //             //     });
-                //             //     this.container.appendChild(fileInput);
-                //             // }
-                //             // fileInput.click();
-                //         }
-                //     }
-                // ]
-            ],
             editorId: Math.random().toString(16).replace("0.", "q"),
             quill: null
-
         }
     },
     mounted() {
@@ -97,7 +46,6 @@ export default {
         initializeQuill() {
             this.lineHeightSetup();
 
-            // this.quill = new Quill(`#${this.editorId}`, { theme: "snow"});
             this.quill = new Quill(`#${this.editorId}`, this.configuration);
 
             this.quill.container.firstChild.innerHTML = this.value;
@@ -143,25 +91,6 @@ export default {
             const element = document.createElement("div");
             element.innerHTML = html;
             return element.innerText;
-        },
-        imageHandler() {
-            const input = document.createElement("input");
-            input.setAttribute("type", "file");
-            input.setAttribute("accept", "image/*");
-            input.click();
-            input.onchange = async() => {
-                const file = input.files[0];
-                const range = this.quill.getSelection();
-
-                const formData = new FormData();
-                formData.append("files", file);
-                formData.append("name", file.name);
-                formData.append("type", file.type);
-                const { data: files } = await axios.post("/filesystem", formData);
-                const imageUrl = files[0].url;
-
-                this.quill.insertEmbed(range.index, "image", imageUrl);
-            }
         }
     }
 }
