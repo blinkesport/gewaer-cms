@@ -386,8 +386,25 @@ export default {
             },
             quillConfiguration: {
                 modules: {
-                    toolbar: {          
-                        container: ["image", [{ align: [] }]],
+                    toolbar: {
+                        container: [
+                            [{ "size": ["small", false, "large", "huge"] }, { header: [1, 2, 3, 4, 5, 6, true] }, { font: [] }],
+                            ["bold", "italic", "underline", "strike", { "header": 1 }, { "header": 2 }],
+                            ["link", "image"],
+                            [{ align: [] }, { "direction": "rtl" }],
+                            [
+                                {
+                                    lineheight: [
+                                        "1.0",
+                                        "1.5",
+                                        "2.0",
+                                        "2.5",
+                                        "3.0"
+                                    ]
+                                }
+                            ],
+                            [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }]
+                        ],
                         handlers: {
                             "image": function() {
                                 const input = document.createElement("input")
@@ -406,7 +423,7 @@ export default {
                                     const imageUrl = files[0].url;
 
                                     this.quill.insertEmbed(range.index, "image", imageUrl);
-                                }.bind(this)
+                                }.bind(this);
                             }
                         }
                     }
