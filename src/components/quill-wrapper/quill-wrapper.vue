@@ -17,6 +17,12 @@ export default {
         value: {
             type: null,
             required: true
+        },
+        configuration: {
+            type: Object,
+            default: () => {
+                return { theme: "snow" };
+            }
         }
     },
     $_veeValidate: {
@@ -29,30 +35,6 @@ export default {
     },
     data() {
         return {
-            defaultToolbarConfigurations: [
-                ["bold", "italic", "underline", "strike", "blockquote"],
-                [{ "header": 1 }, { "header": 2 }],
-                [{ list: "ordered" }, { list: "bullet" }],
-                [{ "script": "sub" }, { "script": "super" }],
-                [{ indent: "-1" }, { indent: "+1" }],
-                [{ "direction": "rtl" }], // text direction
-                [{ size: ["small", false, "large", "huge"] }],
-                [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                [{ color: [] }, { background: [] }],
-                [{ font: [] }],
-                [{ align: [] }],
-                [
-                    {
-                        lineheight: [
-                            "1.0",
-                            "1.5",
-                            "2.0",
-                            "2.5",
-                            "3.0"
-                        ]
-                    }
-                ]
-            ],
             editorId: Math.random().toString(16).replace("0.", "q"),
             quill: null
         }
@@ -64,18 +46,13 @@ export default {
         initializeQuill() {
             this.lineHeightSetup();
 
-            this.quill = new Quill(`#${this.editorId}`, {
-                modules: {
-                    toolbar: this.defaultToolbarConfigurations
-                },
-                theme: "snow"
-            });
+            this.quill = new Quill(`#${this.editorId}`, this.configuration);
 
-            this.setHtml(this.value);
+            this.quill.container.firstChild.innerHTML = this.value;
 
             this.quill.on("text-change", (delta, oldDelta, source) => {
                 if (source === "user") {
-                    const textHTML = this.getHtml();
+                    const textHTML = this.quill.container.firstChild.innerHTML;
 
                     if (!this.hasInnerText(textHTML)) {
                         this.$emit("input", "");
@@ -84,7 +61,6 @@ export default {
                     this.$emit("input", textHTML);
                 }
             });
-
         },
         lineHeightSetup() {
             const Parchment = Quill.import("parchment");
@@ -110,12 +86,6 @@ export default {
             );
             Parchment.register(lineHeightClass);
             Parchment.register(lineHeightStyle);
-        },
-        getHtml() {
-            return this.quill.container.firstChild.innerHTML;
-        },
-        setHtml(data) {
-            this.quill.container.firstChild.innerHTML = data;
         },
         hasInnerText(html) {
             const element = document.createElement("div");
@@ -168,5 +138,9 @@ export default {
 }
 .ql-snow .ql-picker.ql-lineheight .ql-picker-label[data-value="3.0"]::before {
     content: "3.0" !important;
+}
+
+img {
+    display: block;
 }
 </style>
