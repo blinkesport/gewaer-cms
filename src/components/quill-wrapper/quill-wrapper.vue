@@ -51,7 +51,7 @@ export default {
             this.quill.container.firstChild.innerHTML = this.value;
 
             this.quill.on("text-change", (delta, oldDelta, source) => {
-                if (source === "user" || source === "api") {
+                if (["user", "api"].includes(source)) {
                     const textHTML = this.quill.container.firstChild.innerHTML;
                     if (this.hasInnerText(textHTML) || this.hasInnerImage(textHTML)) {
                         this.$emit("input", textHTML);
