@@ -51,14 +51,13 @@ export default {
             this.quill.container.firstChild.innerHTML = this.value;
 
             this.quill.on("text-change", (delta, oldDelta, source) => {
-                if (source === "user") {
+                if (source === "user" || source === "api") {
                     const textHTML = this.quill.container.firstChild.innerHTML;
-
-                    if (!this.hasInnerText(textHTML)) {
-                        this.$emit("input", "");
+                    if (this.hasInnerText(textHTML) || this.hasInnerImage(textHTML)) {
+                        this.$emit("input", textHTML);
                         return;
                     }
-                    this.$emit("input", textHTML);
+                    this.$emit("input", "");
                 }
             });
         },
@@ -91,6 +90,12 @@ export default {
             const element = document.createElement("div");
             element.innerHTML = html;
             return element.innerText;
+        },
+        hasInnerImage(html) {
+            const element = document.createElement("div");
+            element.innerHTML = html;
+            const innerImage = element.querySelector("img");
+            return innerImage != null;
         }
     }
 }
