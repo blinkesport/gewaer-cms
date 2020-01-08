@@ -51,14 +51,13 @@ export default {
             this.quill.container.firstChild.innerHTML = this.value;
 
             this.quill.on("text-change", (delta, oldDelta, source) => {
-                if (source === "user") {
-                    const textHTML = this.quill.container.firstChild.innerHTML;
-
-                    if (!this.hasInnerText(textHTML)) {
+                if (["user", "api"].includes(source)) {
+                    const quillContainer = this.quill.container.firstChild;
+                    if (quillContainer.innerText || quillContainer.innerHTML.includes("<img")) {
+                        this.$emit("input", quillContainer.innerHTML);
+                    } else {
                         this.$emit("input", "");
-                        return;
                     }
-                    this.$emit("input", textHTML);
                 }
             });
         },
@@ -86,11 +85,6 @@ export default {
             );
             Parchment.register(lineHeightClass);
             Parchment.register(lineHeightStyle);
-        },
-        hasInnerText(html) {
-            const element = document.createElement("div");
-            element.innerHTML = html;
-            return element.innerText;
         }
     }
 }
