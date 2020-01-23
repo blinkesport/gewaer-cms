@@ -46,6 +46,19 @@
 import postFormMixins from "@/mixins/postFormMixins";
 export default {
     name: "PostTypeForm",
-    mixins: [postFormMixins]
+    mixins: [postFormMixins],
+    created() {
+        const isEditing = this.$route.params.id;
+        if (isEditing && !this.openedInModal) {
+            this.fetchPostType();
+        }
+    },
+    methods: {
+        fetchPostType() {
+            axios.get(`/posts-types/${this.$route.params.id}`).then(({ data: type }) => {
+                this.resourceData = type;
+            });
+        }
+    }
 }
 </script>

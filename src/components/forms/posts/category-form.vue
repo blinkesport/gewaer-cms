@@ -2,7 +2,7 @@
     <form
         class="resource-form"
         novalidate
-        @submit.prevent="$_sendResourceForm('/categories')"    
+        @submit.prevent="$_sendResourceForm('/categories')"
     >
         <div class="row">
             <div class="col">
@@ -67,6 +67,19 @@ import postFormMixins from "@/mixins/postFormMixins";
 
 export default {
     name: "PostCategoryForm",
-    mixins: [postFormMixins]
+    mixins: [postFormMixins],
+    created() {
+        const isEditing = this.$route.params.id;
+        if (isEditing && !this.openedInModal) {
+            this.fetchCategories();
+        }
+    },
+    methods: {
+        fetchCategories() {
+            axios.get(`/categories/${this.$route.params.id}`).then(({ data: category }) => {
+                this.resourceData = category;
+            });
+        }
+    }
 }
 </script>

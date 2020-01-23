@@ -67,6 +67,26 @@ import postFormMixins from "@/mixins/postFormMixins";
 
 export default {
     name: "PostTagForm",
-    mixins: [postFormMixins]
+    mixins: [postFormMixins],
+    props: {
+        openedInModal: {
+            type: Boolean,
+            default: false
+        }
+    },
+    created() {
+        const isEditing = this.$route.params.id;
+        if (isEditing && !this.openedInModal) {
+            this.fetchTag();
+        }
+    },
+    methods: {
+        fetchTag() {
+            axios.get(`/tags/${this.$route.params.id}`).then(({ data: tag }) => {
+                this.resourceData = tag;
+            });
+        }
+    }
+
 }
 </script>
