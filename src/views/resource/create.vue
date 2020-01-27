@@ -19,7 +19,7 @@ export default {
         tournamentsMatches: () => import(/* webpackChunkName: "tournaments-matches" */ "@c/forms/match/"),
         rss: () => import(/* webpackChunkName: "rss" */ "@c/forms/rss/"),
         games: () => import(/* webpackChunkName: "games" */ "@c/forms/games/"),
-        postTypes: () => import(/* webpackChunkName: "types" */ "@c/forms/posts/type-form/"),
+        postsTypes: () => import(/* webpackChunkName: "types" */ "@c/forms/posts/type-form/"),
         tags: () => import(/* webpackChunkName: "post-tag-form" */ "@c/forms/posts/tag-form"),
         categories: () => import(/* webpackChunkName: "categories-form" */ "@c/forms/posts/category-form")
     },

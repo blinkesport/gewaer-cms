@@ -49,7 +49,7 @@
                     :title="isLoading ? 'Processing, wait a moment...' : 'Cancel'"
                     type="button"
                     class="btn btn-danger"
-                    @click="$emit('form-cancelled')"
+                    @click="$_onFormCancelled"
                 >
                     Cancel
                 </button>
@@ -69,8 +69,7 @@ export default {
     name: "PostCategoryForm",
     mixins: [postFormMixins],
     created() {
-        const isEditing = this.$route.params.id;
-        if (isEditing && !this.openedInModal) {
+        if (this.$_isEditingForm() && !this.openedInModal) {
             this.fetchCategories();
         }
     },
